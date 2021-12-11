@@ -141,37 +141,6 @@ const NotificationMenu: FC<BoxProps> = (boxProps) => {
                     <BellNotificationIcon />}
                 </div>
             </IconButton>
-            <Menu
-                id="notification-list-menu-popover"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                className={classes.menu}
-                MenuListProps={{
-                    'aria-labelledby': 'lock-button',
-                    role: 'listbox',
-                }}
-            >         
-                {notifications.map((e, i) => {
-                    if (e.notificationtype === "LEADACTIVITY") {
-                        const not = e as LeadActivityNotification;
-                        return (
-                            <NotificaionMenuItem
-                                key={i}
-                                title={not.description}
-                                description={not.leadname}
-                                date={formatDate(not.duedate)}
-                                onClick={() => {
-                                    handleClose();
-                                    history.push(paths.CRM_EDIT_LEAD.resolve(not.leadid));
-                                }}
-                            />
-                        );
-                    }
-                
-                    return <div style={{ display: 'none' }} />;
-                })}
-            </Menu>
         </Box>
     );
 };

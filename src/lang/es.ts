@@ -2,6 +2,17 @@ import { ResourceLanguage } from 'i18next';
 import { LangKeys } from './keys';
 
 const translation: LangKeys = {
+    upload_data: 'Carga masiva',
+    routing: 'Ruteo',
+    manifest: 'Manifiesto',
+    fleet: 'Flota',
+    clients: 'Clientes',
+    kpis: 'KPIS',
+    evidences: 'Evidencias',
+    report_distribution: 'Reporte de distribución',
+    tracking: 'Tracking',
+    templates: 'Plantilla',
+
     english: 'Inglés',
     spanish: 'Español',
 

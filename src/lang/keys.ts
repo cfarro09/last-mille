@@ -22,6 +22,18 @@ export const langKeys = {
     period: "period",
     tos: "tos",
     tag: 'tag',
+
+    upload_data: 'upload_data',
+    routing: 'routing',
+    manifest: 'manifest',
+    fleet: 'fleet',
+    clients: 'clients',
+    kpis: 'kpis',
+    evidences: 'evidences',
+    report_distribution: 'report_distribution',
+    tracking: 'tracking',
+    templates: 'templates',
+
     highestTMO: "highestTMO",
     currency: "currency",
     useradditionalfee: "useradditionalfee",

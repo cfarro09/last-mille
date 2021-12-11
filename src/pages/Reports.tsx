@@ -20,7 +20,6 @@ import { showSnackbar, showBackdrop, manageConfirmation } from 'store/popus/acti
 import { useDispatch } from 'react-redux';
 import { reportsImage } from '../icons/index';
 import AssessorProductivity from 'components/report/AssessorProductivity';
-import DetailReportDesigner from 'pages/ReportTemplate';
 import { SkeletonReport } from 'components';
 import AddIcon from '@material-ui/icons/Add';
 import IconButton from '@material-ui/core/IconButton';
@@ -28,8 +27,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ReportPersonalized from 'components/personalizedreport/ReportPersonalized'
-import Heatmap from './Heatmap';
-import RecordHSMRecord from './RecordHSMReport';
+
 
 interface RowSelected {
     row: Dictionary | null,
@@ -556,15 +554,6 @@ const Reports: FC = () => {
                 </div>
             </div>
         );
-    } else if (viewSelected === "view-3") {
-        return (
-            <DetailReportDesigner
-                data={rowReportSelected}
-                setViewSelected={setViewSelected}
-                multiData={reportsResult.multiDataAux.data}
-                fetchData={fetchData}
-            />
-        )
     } else if (viewSelected === "view-4") {
         return (
             <ReportPersonalized
@@ -573,34 +562,7 @@ const Reports: FC = () => {
                 setViewSelected={setViewSelected}
             />
         )
-    } else if (viewSelected === "heatmap") {
-        return (
-
-            <Fragment>
-                <div style={{ width: '100%' }}>
-                    <TemplateBreadcrumbs
-                        breadcrumbs={getArrayBread("Heatmap")}
-                        handleClick={handleSelectedString}
-                    />
-                    <Heatmap />
-                </div>
-            </Fragment>
-        )
-    } else if (viewSelected === "recordhsmreport") {
-        return (
-
-            <Fragment>
-                <div style={{ width: '100%' }}>
-                    <TemplateBreadcrumbs
-                        breadcrumbs={getArrayBread("recordhsmreport")}
-                        handleClick={handleSelectedString}
-                    />
-                    <RecordHSMRecord />
-                </div>
-            </Fragment>
-        )
     }
-
     else {
         return (
             <ReportItem

@@ -4,6 +4,18 @@ import { LangKeys } from './keys';
 const translation: LangKeys = {
     english: 'English',
     spanish: 'Spanish',
+    
+    upload_data: 'Upload data',
+    routing: 'Routing',
+    manifest: 'Manifest',
+    fleet: 'Fleet',
+    clients: 'Clients',
+    kpis: 'Kpis',
+    evidences: 'Evidences',
+    report_distribution: 'Report Distribution',
+    tracking: 'Tracking',
+    templates: 'Templates',
+
 
     dashboard: 'Dashboard',
     dashboard_plural: 'Dashboards',
