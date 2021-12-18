@@ -429,7 +429,7 @@ const DetailOrganization: React.FC<DetailOrganizationProps> = ({ data: { row, ed
 
 const Organizations: FC = () => {
     const dispatch = useDispatch();
-    const ressignup = useSelector(state => state.signup.currencyList);
+    // const ressignup = useSelector(state => state.signup.currencyList);
     const { t } = useTranslation();
     const mainResult = useSelector(state => state.main);
     const executeResult = useSelector(state => state.main.execute);
@@ -572,13 +572,7 @@ const Organizations: FC = () => {
     }
     else if (viewSelected === "view-2") {
         return (
-            <DetailOrganization
-                data={rowSelected}
-                setViewSelected={setViewSelected}
-                multiData={mainResult.multiData.data}
-                fetchData={fetchData}
-                dataCurrency={ressignup.data}
-            />
+           <div></div>
         )
     } else
         return null;

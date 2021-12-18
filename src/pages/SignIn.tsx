@@ -130,7 +130,7 @@ const SignIn = () => {
     useEffect(() => {
         if (!resLogin.error && resLogin.user && getAccessToken()) {
             dispatch(connectAgentUI(resLogin.user.automaticConnection!!))
-            history.push(resLogin.user.redirect ? resLogin.user.redirect : "/supervisor");
+            history.push(resLogin.user.redirect ? resLogin.user.redirect : "/user");
         }
     }, [resLogin]);
 
@@ -149,7 +149,7 @@ const SignIn = () => {
                         onSubmit={onSubmitLogin}
                     >
                         <TextField
-                            variant="outlined"
+                            // variant="outlined"
                             margin="normal"
                             fullWidth
                             value={dataAuth.username}
@@ -158,7 +158,7 @@ const SignIn = () => {
                             name="usr"
                         />
                         <TextField
-                            variant="outlined"
+                            // variant="outlined"
                             margin="normal"
                             fullWidth
                             label={t(langKeys.password)}

@@ -13,12 +13,23 @@ export interface IUpload extends ITemplate {
     url?: string;
 }
 
+export interface IBaseState2 {
+    loading: boolean;
+    data: Dictionary;
+    code?: string;
+    error: boolean;
+    /** Error message */
+    message?: string;
+}
+
 export interface IState {
     mainData: IListStatePaginated<Dictionary>;
     mainDynamic: IListStatePaginated<Dictionary>;
     multiData: IListStatePaginated<MultiData>;
     multiDataAux: IListStatePaginated<itemMulti>;
     execute: IListStatePaginated<Dictionary> & { success: boolean | undefined | null };
+    uploadData: IBaseState2;
+    processData: IBaseState2;
     mainAux: IListStatePaginated<Dictionary>;
     mainAux2: IListStatePaginated<Dictionary>;
     mainPaginated: IListStatePaginated<Dictionary>;
@@ -33,6 +44,8 @@ export const initialState: IState = {
     multiData: initialListPaginatedState,
     multiDataAux: initialListPaginatedState,
     execute: { success: undefined, ...initialListPaginatedState },
+    uploadData: { ...initialListPaginatedState, data: {} },
+    processData: { ...initialListPaginatedState, data: {} },
     mainAux: initialListPaginatedState,
     mainAux2: initialListPaginatedState,
     mainPaginated: initialListPaginatedState,
@@ -56,6 +69,18 @@ export default createReducer<IState>(initialState, {
     [actionTypes.EXECUTE_MAIN_SUCCESS]: caseFunctions.executeSuccess,
     [actionTypes.EXECUTE_MAIN_FAILURE]: caseFunctions.executeFailure,
     [actionTypes.EXECUTE_MAIN_RESET]: caseFunctions.executeReset,
+
+
+    [actionTypes.UPLOAD_DATA]: caseFunctions.uploadData,
+    [actionTypes.UPLOAD_DATA_SUCCESS]: caseFunctions.uploadDataSuccess,
+    [actionTypes.UPLOAD_DATA_FAILURE]: caseFunctions.uploadDataFailure,
+    [actionTypes.UPLOAD_DATA_RESET]: caseFunctions.uploadDataReset,
+
+    [actionTypes.PROCESS_DATA]: caseFunctions.processData,
+    [actionTypes.PROCESS_DATA_SUCCESS]: caseFunctions.processDataSuccess,
+    [actionTypes.PROCESS_DATA_FAILURE]: caseFunctions.processDataFailure,
+    [actionTypes.PROCESS_DATA_RESET]: caseFunctions.processDataReset,
+
 
     [actionTypes.AUX_MAIN]: caseFunctions.mainAux,
     [actionTypes.AUX_MAIN_SUCCESS]: caseFunctions.mainAuxSuccess,
@@ -87,7 +112,7 @@ export default createReducer<IState>(initialState, {
     [actionTypes.DATA_DYNAMIC_SUCCESS]: caseFunctions.mainDynamicSuccess,
     [actionTypes.DATA_DYNAMIC_FAILURE]: caseFunctions.mainDynamicFailure,
     [actionTypes.DATA_DYNAMIC_RESET]: caseFunctions.mainDynamicReset,
-    
+
     [actionTypes.DATA_EXPORT_DYNAMIC]: caseFunctions.exportDataDynamic,
     [actionTypes.DATA_EXPORT_DYNAMIC_SUCCESS]: caseFunctions.exportDataDynamicSuccess,
     [actionTypes.DATA_EXPORT_DYNAMIC_FAILURE]: caseFunctions.exportDataDynamicFailure,

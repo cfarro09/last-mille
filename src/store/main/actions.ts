@@ -1,4 +1,4 @@
-import { IActionCall, IRequestBodyPaginated, IRequestBody, ITransaction, IRequestBodyDynamic } from "@types";
+import { IActionCall, IRequestBodyPaginated, IRequestBody, ITransaction, IRequestBodyDynamic, Dictionary } from "@types";
 import { CommonService } from "network";
 import actionTypes from "./actionTypes";
 
@@ -154,6 +154,30 @@ export const executeWithFiles = (
 
 /**Action type = EXECUTE_MAIN */
 export const resetExecute = (): IActionCall => ({ type: actionTypes.EXECUTE_MAIN_RESET });
+
+
+export const uploadData = (data: Dictionary): IActionCall => ({
+    callAPI: () => CommonService.uploadData(data),
+    types: {
+        loading: actionTypes.UPLOAD_DATA,
+        success: actionTypes.UPLOAD_DATA_SUCCESS,
+        failure: actionTypes.UPLOAD_DATA_FAILURE,
+    },
+    type: null,
+});
+
+export const processLoad = (data: Dictionary): IActionCall => ({
+    callAPI: () => CommonService.processLoad(data),
+    types: {
+        loading: actionTypes.PROCESS_DATA,
+        success: actionTypes.PROCESS_DATA_SUCCESS,
+        failure: actionTypes.PROCESS_DATA_FAILURE,
+    },
+    type: null,
+});
+
+
+
 
 export const getMultiCollection = (requestBodies: IRequestBody[]): IActionCall => ({
     callAPI: () => CommonService.multiMain(requestBodies),

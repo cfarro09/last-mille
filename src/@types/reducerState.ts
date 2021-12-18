@@ -7,6 +7,7 @@ export interface IBaseState {
     message?: string;
 }
 
+
 export interface IListState<T> extends IBaseState {
     data: T[];
 }

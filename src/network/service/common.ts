@@ -1,5 +1,5 @@
 import { apiUrls } from '../../common/constants';
-import { IRequestBody, IRequestBodyPaginated, ITransaction, IRequestBodyDynamic } from '@types';
+import { IRequestBody, IRequestBodyPaginated, ITransaction, IRequestBodyDynamic, Dictionary } from '@types';
 import { APIManager, ExternalRequestManager } from '../manager';
 import { removeAuthorizationToken } from "common/helpers";
 
@@ -76,4 +76,13 @@ export function request_send(request: any) {
     else {
         return ExternalRequestManager.get(url, { auth: authorization, headers: headersjson });
     }
+}
+
+
+export function uploadData(data: Dictionary) {
+    return APIManager.post(apiUrls.UPLOAD_DATA, { data });
+}
+
+export function processLoad(data: Dictionary) {
+    return APIManager.post(apiUrls.PROCESS_DATA, { data });
 }

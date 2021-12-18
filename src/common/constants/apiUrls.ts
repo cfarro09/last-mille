@@ -2,7 +2,7 @@ const ENV = "DEVELOP";
 
 const APIS_URL = {
     DEVELOP: {
-        API: 'https://apix.laraigo.com/api',
+        API: 'http://167.114.83.198:6065/api',
         WS: 'https://socket.laraigo.com',
         CHATFLOW: 'https://zyxmelinux.zyxmeapp.com/zyxme/chatflow',
         FACEBOOKAPP: '1094526090706564',
@@ -63,6 +63,8 @@ export const apiUrls = {
     MAIN_DYNAMIC_EXPORT: `${BASE_URL}/reportdesigner/export`,
     INTEGRATION: `${BASE_URL}/integration`,
     UPLOAD_FILE: `${BASE_URL}/upload`,
+    UPLOAD_DATA: `${BASE_URL}/load/insert`,
+    PROCESS_DATA: `${BASE_URL}/load/process`,
     EXPORT_DATA: `${BASE_URL}/main/export`,
     
     CLOSE_TICKET: `${BASE_URL}/ticket/close`,

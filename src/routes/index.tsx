@@ -4,7 +4,7 @@ import Layout from 'components/layout/Layout';
 import Popus from 'components/layout/Popus';
 import {
 	Users, SignIn, Properties, NotFound, Forbidden, InternalServererror,
-	Reports, Corporations, Organizations
+	Reports, Corporations, Organizations, MassiveLoad, Routing, Tracking
 } from 'pages';
 
 import { BrowserRouter as Router, Switch, Route, RouteProps, useLocation } from 'react-router-dom';
@@ -38,7 +38,6 @@ interface PrivateRouteProps extends Omit<RouteProps, "component"> {
 
 const ProtectRoute: FC<PrivateRouteProps> = ({ children, component: Component, ...rest }) => {
 	const resValidateToken = useSelector(state => state.login.validateToken);
-	const ignorePwdchangefirstloginValidation = useSelector(state => state.login.ignorePwdchangefirstloginValidation);
 	const resLogin = useSelector(state => state.login.login);
 
 	const applications = resValidateToken?.user?.menu;
@@ -91,6 +90,22 @@ const RouterApp: FC = () => {
 				<ProtectRoute exact path="/" />
 				<Route exact path={paths.SIGNIN} component={SignIn} />
 				
+				<ProtectRoute exact path={paths.UPLOAD_DATA}>
+					<Layout mainClasses={classes.main}>
+						<MassiveLoad />
+					</Layout>
+				</ProtectRoute>
+				<ProtectRoute exact path={paths.ROUTING}>
+					<Layout mainClasses={classes.main}>
+						<Routing />
+					</Layout>
+				</ProtectRoute>
+				<ProtectRoute exact path={paths.TRACKING}>
+					<Layout mainClasses={classes.main}>
+						<Tracking />
+					</Layout>
+				</ProtectRoute>
+
 				<ProtectRoute exact path={paths.REPORTS}>
 					<Layout mainClasses={classes.main}>
 						<Reports />

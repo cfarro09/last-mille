@@ -41,7 +41,7 @@ const Header = ({ classes }: IProps) => {
                     <Menu />
                 </IconButton>
                 <img
-                    src="/Laraigo-logo-name.svg"
+                    src="https://staticfileszyxme.s3.us-east.cloud-object-storage.appdomain.cloud/logoqapla.png"
                     style={{ height: 37 }}
                     alt="logo"
                 />

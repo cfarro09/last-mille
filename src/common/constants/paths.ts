@@ -13,10 +13,10 @@ const paths = {
     CONFIGURATION: '/configuration',
     EXTRAS: '/extras',
     PROPERTIES: '/extras/properties',
-    USERS: '/extras/users',
+    USERS: '/user',
     DOMAINS: '/extras/domains',
 
-    UPLOAD_DATA: '/upload-data',
+    UPLOAD_DATA: '/massive_load',
     ROUTING: '/routing',
     MANIFEST: '/manifest',
     FLEET: '/fleet',

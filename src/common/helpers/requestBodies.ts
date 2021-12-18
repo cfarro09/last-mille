@@ -1,3 +1,4 @@
+import { Search } from '@material-ui/icons';
 import { DashboardTemplateSave, Dictionary, IChannel, IChatWebAdd, ICrmLead, ICrmLeadActivitySave, ICrmLeadNoteSave, ICrmLeadTagsSave, ILead, IPerson, IRequestBody, IRequestBodyPaginated } from '@types';
 import { uuidv4 } from '.';
 
@@ -2129,5 +2130,65 @@ export const getDashboardTemplateSel = (dashboardtemplateId: number | string = 0
 export const getDashboardTemplateIns = (parameters: DashboardTemplateSave) => ({
     method: "UFN_DASHBOARDTEMPLATE_INS",
     key: "UFN_DASHBOARDTEMPLATE_INS",
+    parameters,
+});
+
+export const getTemplates = () => ({
+    method: "SP_SEL_TEMPLATE",
+    key: "SP_SEL_TEMPLATE",
+    parameters: {
+        status: 'ACTIVO', type: 'DISTRIBUCION'
+    },
+});
+
+export const getMassiveLoads = () => ({
+    method: "SP_SEL_MASSIVE_LOAD",
+    key: "SP_SEL_MASSIVE_LOAD",
+    parameters: {
+        type: "DISTRIBUCION"
+    },
+});
+
+export const getGuides = () => ({
+    method: "SP_SEL_GUIDES",
+    key: "SP_SEL_GUIDES",
+    parameters: {},
+});
+
+export const getDrivers = () => ({
+    method: "SP_VEHICLE_DRIVER",
+    key: "SP_VEHICLE_DRIVER",
+    parameters: {},
+});
+
+export const insertShippingOrder = (parameters: Dictionary) => ({
+    method: "SP_CREATE_SHIPPING_ORDER",
+    key: "SP_CREATE_SHIPPING_ORDER",
+    parameters,
+});
+
+// search, filterby
+export const getGuideByBarcode = (parameters: Dictionary, index: number) => ({
+    method: "SP_SEL_GUIDE_BY_BARCODE",
+    key: "SP_SEL_GUIDE_BY_BARCODE",
+    parameters,
+});
+
+// guideid
+export const getInfoGuide = (parameters: Dictionary) => ({
+    method: "SP_SEL_GUIDE_INFO",
+    key: "SP_SEL_GUIDE_INFO",
+    parameters,
+});
+// guideid
+export const getInfoTracking = (parameters: Dictionary) => ({
+    method: "SP_SEL_GUIDE_TRACKING",
+    key: "SP_SEL_GUIDE_TRACKING",
+    parameters,
+});
+// guideid
+export const getImageGuide = (parameters: Dictionary) => ({
+    method: "SP_SEL_IMG_GUIDES",
+    key: "SP_SEL_IMG_GUIDES",
     parameters,
 });

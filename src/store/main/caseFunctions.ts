@@ -325,6 +325,93 @@ export const executeReset = (state: IState): IState => ({
     execute: initialState.execute,
 });
 
+
+
+
+
+
+export const uploadData = (state: IState): IState => ({
+    ...state,
+    uploadData: { ...state.uploadData, loading: true, error: false }
+});
+
+export const uploadDataSuccess = (state: IState, action: IAction): IState => {
+    return {
+        ...state,
+        uploadData: {
+            data: action.payload.data || {},
+            loading: false,
+            error: false,
+        }
+    }
+};
+
+export const uploadDataFailure = (state: IState, action: IAction): IState => {
+    console.log("actionaaaa", action)
+    return {
+        ...state,
+        uploadData: {
+            ...state.uploadData,
+            loading: false,
+            error: true,
+            code: action.payload.code ? "error_" + action.payload.code.toString().toLowerCase() : 'error_unexpected_error',
+            message: action.payload.message || 'error_unexpected_error',
+        }
+    }
+};
+
+export const uploadDataReset = (state: IState): IState => ({
+    ...state,
+    uploadData: initialState.uploadData,
+});
+
+
+
+
+
+export const processData = (state: IState): IState => ({
+    ...state,
+    processData: { ...state.processData, loading: true, error: false }
+});
+
+export const processDataSuccess = (state: IState, action: IAction): IState => {
+    return {
+        ...state,
+        processData: {
+            data: action.payload.data || {},
+            loading: false,
+            error: false,
+        }
+    }
+};
+
+export const processDataFailure = (state: IState, action: IAction): IState => {
+    console.log("actionaaaa", action)
+    return {
+        ...state,
+        processData: {
+            ...state.processData,
+            loading: false,
+            error: true,
+            code: action.payload.code ? "error_" + action.payload.code.toString().toLowerCase() : 'error_unexpected_error',
+            message: action.payload.message || 'error_unexpected_error',
+        }
+    }
+};
+
+export const processDataReset = (state: IState): IState => ({
+    ...state,
+    processData: initialState.processData,
+});
+
+
+
+
+
+
+
+
+
 export const mainPaginated = (state: IState): IState => ({
     ...state,
     mainPaginated: { ...state.mainPaginated, loading: true, error: false }

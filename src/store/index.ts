@@ -9,7 +9,7 @@ import mainReducer, { IState as IMain } from './main/reducer';
 import popusReducer, { IState as IPopus } from './popus/reducer';
 import inboxReducer, { IState as IInbox } from './inbox/reducer';
 import integrationManagerReducer, { IState as IIntegrationManager } from './integrationmanager/reducer';
-import botdesignerReducer, { IState as IBotDesigner } from './botdesigner/reducer';
+import assignmentReducer, { IState as IAsignment } from './assignment/reducer';
 import signupReducer, { IState as ISignUp} from './signup/reducer';
 import personReducer, { IState as IPerson } from './person/reducer';
 import settingReducer, { IState as ISetting } from './setting/reducer';
@@ -19,21 +19,21 @@ import culqiReducer, { IState as ICulqi } from './culqi/reducer';
 import dashboardReducer, { IState as IDashboard } from './dashboard/reducer';
 
 export interface IRootState {
-    ticket: ITicketState;
     login: ILogin,
-    main: IMain;
     popus: IPopus;
+    main: IMain;
+    // ticket: ITicketState;
     inbox: IInbox;
-    channel: IChannelState;
-    integrationmanager: IIntegrationManager;
-    botdesigner: IBotDesigner;
-    signup: ISignUp;
-    person: IPerson;
-    setting: ISetting;
-    activationuser: IActivationUser;
-    lead: ILead;
-    culqi: ICulqi;
-    dashboard: IDashboard;
+    // channel: IChannelState;
+    // integrationmanager: IIntegrationManager;
+    assignment: IAsignment;
+    // signup: ISignUp;
+    // person: IPerson;
+    // setting: ISetting;
+    // activationuser: IActivationUser;
+    // lead: ILead;
+    // culqi: ICulqi;
+    // dashboard: IDashboard;
 }
 
 declare global {
@@ -43,21 +43,22 @@ declare global {
 }   
 
 const rootReducer = combineReducers<IRootState>({
-    ticket: ticketReducer,
     login: loginReducer,
     main: mainReducer,
     popus: popusReducer,
+    assignment: assignmentReducer,
+    // ticket: ticketReducer,
     inbox: inboxReducer,
-    integrationmanager: integrationManagerReducer,
-    channel: channelReducer,
-    botdesigner: botdesignerReducer,
-    signup: signupReducer,
-    person: personReducer,
-    setting: settingReducer,
-    activationuser: activationUserReducer,
-    lead: leadReducer,
-    culqi: culqiReducer,
-    dashboard: dashboardReducer,
+    // integrationmanager: integrationManagerReducer,
+    // channel: channelReducer,
+    // botdesigner: botdesignerReducer,
+    // signup: signupReducer,
+    // person: personReducer,
+    // setting: settingReducer,
+    // activationuser: activationUserReducer,
+    // lead: leadReducer,
+    // culqi: culqiReducer,
+    // dashboard: dashboardReducer,
 });
 
 export default function configureStore(preloadedState?: IRootState) {
