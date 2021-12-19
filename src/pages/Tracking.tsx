@@ -10,9 +10,10 @@ import { FieldMultiSelect, DialogZyx, FieldSelect, FieldEdit } from 'components'
 import { getCollection, getMultiCollectionAux, getMultiCollection, resetAllMain, execute, processLoad } from 'store/main/actions';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import {getGuideByBarcode, getInfoGuide, getInfoTracking, getImageGuide } from 'common/helpers';
+import { getGuideByBarcode, getInfoGuide, getInfoTracking, getImageGuide } from 'common/helpers';
 import { Dictionary } from "@types";
 import Timeline from '@material-ui/lab/Timeline';
+import TableZyx from '../components/fields/table-simple';
 import DoneIcon from '@material-ui/icons/Done';
 import TimelineItem from '@material-ui/lab/TimelineItem';
 import TimelineSeparator from '@material-ui/lab/TimelineSeparator';
@@ -34,7 +35,7 @@ import BusinessIcon from '@material-ui/icons/Business';
 import PhoneIcon from '@material-ui/icons/Phone';
 import PersonIcon from '@material-ui/icons/Person';
 import EmailIcon from '@material-ui/icons/Email';
-import { AccountBox, AccountCircle, AddRounded, CropFree, LocalShipping } from '@material-ui/icons';
+import { AccountBox, AccountCircle, AddRounded, CropFree, LocalShipping, RadioButtonChecked } from '@material-ui/icons';
 import CropFreeIcon from '@material-ui/icons/CropFree';
 const optionsFilterBy = [
     { description: 'Codigo de Barras', filterby: 'client_barcode' },
@@ -172,11 +173,18 @@ const InfoGuide: FC = () => {
     const [listattempts, setlistattempts] = useState<Dictionary[]>([])
     const infoguide = dataGuide.data.length > 0 ? dataGuide.data[0].data[0] : null;
     const tracking = dataGuide.data.length ? dataGuide.data[1].data : [];
+    const [listracking, setlistracking] = useState<Dictionary[]>([]);
+    console.log(listracking)
+
+    const skus = dataGuide.data.length > 0 ? dataGuide.data[0].data.map(x => ({
+        code: x.sku_code, description: x.sku_description, brand: x.sku_brand
+    })) : [];
+
 
     useEffect(() => {
         if (tracking.length > 0) {
             const attempsres: Dictionary[] = [];
-            const listdata = (tracking.map((x: Dictionary) => ({ ...x, attempt: (x.attempt === 0 ? 1 : x.attempt) })) as Dictionary[]).filter(x => !/DESPACHADO|PENDIENTE|DESPACHO ACEPTADO/gi.test(x.status || ""));
+            const listdata = (tracking.map((x: Dictionary) => ({ ...x, attempt: (x.attempt === 0 ? 1 : x.attempt) })) as Dictionary[]).filter(x => !/DESPACHADO|PENDIENTE|DESPACHO|ACEPTADO/gi.test(x.status || ""));
             const attempts = listdata.reduce((repeated, item) => {
                 repeated[item.attempt] = item.id_shipping_order;
                 return repeated;
@@ -187,37 +195,42 @@ const InfoGuide: FC = () => {
             }
             setlistattempts(attempsres)
             const lastAttemptObject = attempsres[attempsres.length - 1];
-            settrackingselected(listdata.filter(x => x.attempt === lastAttemptObject.attempt))
+            setlistracking(listdata);
+
+            const posibletracking = listdata.filter(x => x.attempt == lastAttemptObject.attempt);
+            settrackingselected(posibletracking[0].status !== "PROCESADO" ? [listdata[0], ...posibletracking] : posibletracking)
             setlastattempt(lastAttemptObject);
-            // const lastattempt = lastAttemptObject ? lastAttemptObject.attempt : 0;
         }
     }, [tracking])
 
     const images = dataGuide.data.length ? dataGuide.data[2].data : [];
 
-    console.log(dataGuide)
-    //     PhoneIcon
-    // PersonIcon
-    // EmailIcon
     return (
-        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', width: '100%' }}>
-
-
+        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', width: '100%', overflowY: 'auto' }}>
             {trackingselected.length > 0 && (
-                <div className={classes.card} style={{ flex: '1 1 100%' }}>
+                <div className={classes.card} style={{ flex: '1 1 50%' }}>
                     <div className={classes.headercard}>Tracking</div>
-                    <div style={{ width: 200 }}>
-                        <FieldSelect
-                            label="Visita"
-                            className="col-6"
-                            valueDefault={lastattempt?.attempt}
-                            onChange={(value) => {
-
-                            }}
-                            data={listattempts}
-                            optionDesc="attempt"
-                            optionValue="attempt"
-                        />
+                    <div>
+                        <div style={{ width: 200, marginLeft: 'auto' }}>
+                            <FieldSelect
+                                label="Visita"
+                                className="col-6"
+                                valueDefault={lastattempt?.attempt}
+                                onChange={(value) => {
+                                    if (value) {
+                                        settrackingselected(() => {
+                                            const newlist = listracking.filter(x => x.attempt == value.attempt)
+                                            return newlist[0].status !== "PROCESADO" ? [listracking[0], ...newlist] : newlist;
+                                        })
+                                    }
+                                    else
+                                        settrackingselected([])
+                                }}
+                                data={listattempts}
+                                optionDesc="attempt"
+                                optionValue="attempt"
+                            />
+                        </div>
                     </div>
 
                     <Timeline align="alternate">
@@ -229,7 +242,7 @@ const InfoGuide: FC = () => {
                             </TimelineOppositeContent>
                             <TimelineSeparator>
                                 <TimelineDot color={trackingselected[3] ? "primary" : "grey"}>
-                                    <DoneIcon />
+                                    <RadioButtonChecked />
                                 </TimelineDot>
                                 <TimelineConnector />
                             </TimelineSeparator>
@@ -249,8 +262,8 @@ const InfoGuide: FC = () => {
                                 </div>
                             </TimelineOppositeContent>
                             <TimelineSeparator>
-                                <TimelineDot color={trackingselected[2] ? "primary" : "grey"}>
-                                    <DoneIcon />
+                                <TimelineDot color={false ? "primary" : "grey"}>
+                                    <RadioButtonChecked />
                                 </TimelineDot>
                                 <TimelineConnector />
                             </TimelineSeparator>
@@ -269,7 +282,7 @@ const InfoGuide: FC = () => {
                             </TimelineOppositeContent>
                             <TimelineSeparator>
                                 <TimelineDot color={trackingselected[1] ? "primary" : "grey"}>
-                                    <DoneIcon />
+                                    <RadioButtonChecked />
                                 </TimelineDot>
                                 <TimelineConnector />
                             </TimelineSeparator>
@@ -288,7 +301,7 @@ const InfoGuide: FC = () => {
                             </TimelineOppositeContent>
                             <TimelineSeparator>
                                 <TimelineDot color="primary">
-                                    <DoneIcon />
+                                    <RadioButtonChecked />
                                 </TimelineDot>
                             </TimelineSeparator>
                             <TimelineContent>
@@ -303,7 +316,7 @@ const InfoGuide: FC = () => {
                 </div>
 
             )}
-            <div className={classes.card}>
+            <div className={classes.card} style={{ flex: '1 1 200px' }}>
                 <div className={classes.headercard}>Unidad asignada</div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <AccountBox style={{ fontSize: '24px', color: '#00A6D6' }} />
@@ -323,6 +336,18 @@ const InfoGuide: FC = () => {
 
                     <LocalShipping style={{ width: 15 }} />
                     <div>Tipo vehiculo: {tracking.length > 0 ? tracking[tracking.length - 1].vehicle_type : ''}</div>
+                </div>
+
+            </div>
+            <div className={classes.card} style={{ flex: '1 1 300px' }}>
+                <div className={classes.headercard}>Productos</div>
+                <div>
+                    {skus.map((sku, index) => (
+                        <div key={index} className={classes.containerItemAgent}>
+                            <div style={{ fontWeight: 'bold' }}>{sku.code}</div>
+                            <div>{sku.description}</div>
+                        </div>
+                    ))}
                 </div>
             </div>
             <div className={classes.card}>
@@ -403,7 +428,10 @@ const Search = () => {
     useEffect(() => {
         if (!multiData.loading && !multiData.error && multiData.data.length > 0) {
             if (multiData.data[0].key === "SP_SEL_GUIDE_BY_BARCODE") {
-                dispatch(addGuideConsulted(multiData.data.filter(x => x.data.length > 0).map(x => x.data[0])));
+                console.log(multiData.data.filter(x => x.data.length > 0))
+                // dispatch(addGuideConsulted(multiData.data.filter(x => x.data.length > 0).map(x => x.data[0])));
+
+                dispatch(addGuideConsulted(multiData.data.filter(x => x.data.length > 0).reduce((acc: Dictionary[], item) => [...(acc), ...(item.data)], [])))
             }
         }
     }, [multiData])
@@ -482,7 +510,7 @@ const MassiveLoad: FC = () => {
                     ))}
                 </div>
             </div>
-            <div style={{ width: '65%' }}>
+            <div style={{ width: '65%', display: 'flex', flexDirection: 'column' }}>
                 {(selectedGuide > 0 && !multiData.loading) &&
                     <InfoGuide />
                 }
