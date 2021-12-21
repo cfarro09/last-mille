@@ -152,15 +152,6 @@ const AccountMenu: FC = () => {
                         <Trans i18nKey={langKeys.personalsettings} />
                     </Button>
                     <Button
-                        onClick={openprivacypolicies}
-                        variant="outlined"
-                        color="primary"
-                        fullWidth
-                        style={{ fontWeight: "normal"}}
-                    >
-                        <Trans i18nKey={langKeys.privacypoliciestitle} />
-                    </Button>
-                    <Button
                         variant="outlined"
                         onClick={signOut}
                         fullWidth

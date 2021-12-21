@@ -10,5 +10,6 @@ export { default as Corporations } from './Corporations';
 export { default as MassiveLoad } from './MassiveLoad';
 export { default as Routing } from './Routing';
 export { default as Tracking } from './Tracking';
+export { default as Manifest } from './Manifest';
 
 export { default as Organizations } from './Organizations';

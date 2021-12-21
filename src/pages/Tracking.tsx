@@ -262,7 +262,7 @@ const InfoGuide: FC = () => {
                                 </div>
                             </TimelineOppositeContent>
                             <TimelineSeparator>
-                                <TimelineDot color={false ? "primary" : "grey"}>
+                                <TimelineDot color={trackingselected[2] ? "primary" : "grey"}>
                                     <RadioButtonChecked />
                                 </TimelineDot>
                                 <TimelineConnector />

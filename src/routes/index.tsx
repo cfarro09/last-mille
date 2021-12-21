@@ -4,7 +4,7 @@ import Layout from 'components/layout/Layout';
 import Popus from 'components/layout/Popus';
 import {
 	Users, SignIn, Properties, NotFound, Forbidden, InternalServererror,
-	Reports, Corporations, Organizations, MassiveLoad, Routing, Tracking
+	Reports, Corporations, Organizations, MassiveLoad, Routing, Tracking, Manifest
 } from 'pages';
 
 import { BrowserRouter as Router, Switch, Route, RouteProps, useLocation } from 'react-router-dom';
@@ -120,6 +120,11 @@ const RouterApp: FC = () => {
 				<ProtectRoute exact path={paths.ORGANIZATIONS}>
 					<Layout mainClasses={classes.main}>
 						<Organizations />
+					</Layout>
+				</ProtectRoute>
+				<ProtectRoute exact path={paths.MANIFEST}>
+					<Layout mainClasses={classes.main}>
+						<Manifest />
 					</Layout>
 				</ProtectRoute>
 				

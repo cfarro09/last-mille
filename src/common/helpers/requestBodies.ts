@@ -2192,3 +2192,11 @@ export const getImageGuide = (parameters: Dictionary) => ({
     key: "SP_SEL_IMG_GUIDES",
     parameters,
 });
+
+export const selShippingOrder = () => ({
+    method: "SP_SEL_SHIPPING_ORDERS",
+    key: "SP_SEL_SHIPPING_ORDERS",
+    parameters: {
+        status: null
+    },
+});
