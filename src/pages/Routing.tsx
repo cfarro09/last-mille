@@ -186,11 +186,9 @@ const ItemRoute: FC<{ route: Dictionary, setOpenModal: (param: any) => void }> =
             })}
         >
             <Button
-                // variant="contained"
                 type="button"
                 style={{ padding: 0 }}
                 color="primary"
-                // startIcon={<ClearIcon color="secondary" />}
                 onClick={() => setOpenModal(true)}
             >Asignar chofer</Button>
             <div>Ruta {route.id + 1}</div>
@@ -205,12 +203,12 @@ const ItemRoute: FC<{ route: Dictionary, setOpenModal: (param: any) => void }> =
                 />
                 <CountTicket
                     label="Bultos"
-                    count={route.guides.length}
+                    count={Array.from(new Set(route.guides.map((x: Dictionary) => x.guide_number))).length}
                     color="#55BD84"
                 />
                 <CountTicket
                     label="Paradas"
-                    count={route.guides.length}
+                    count={Array.from(new Set(route.guides.map((x: Dictionary) => x.address))).length}
                     color="#55BD84"
                 />
             </div>
@@ -292,7 +290,6 @@ const ResumeAssignment: FC = () => {
                     variant="contained"
                     type="button"
                     color="secondary"
-                    // startIcon={<ClearIcon color="secondary" />}
                     onClick={() => processData()}
                 >Procesar</Button>
 
@@ -300,7 +297,6 @@ const ResumeAssignment: FC = () => {
                     variant="contained"
                     type="button"
                     color="primary"
-                    // startIcon={<ClearIcon color="secondary" />}
                     onClick={() => dispatch(addRoute())}
                 >Agregar ruta</Button>
 
@@ -342,16 +338,13 @@ const Search = () => {
         e.preventDefault();
         searchbarcode();
     }
+    
     const searchbarcode = () => {
         const route = routeList.data.find(x => x.id === selectedRoute);
         if (route) {
-
             const posibleslist = Array.from(new Set(textsearch.split(" ")))
-
             posibleslist.forEach(text => {
-
                 const existeinallroutes = routeList.data.some(x => x.guides.some((x: Dictionary) => x[filterby.filterby] === text))
-
                 if (existeinallroutes) {
                     if (posibleslist.length === 1) {
                         dispatch(showSnackbar({ show: true, success: false, message: "La guía ya fue asignada" }))
@@ -431,8 +424,6 @@ const MassiveLoad: FC = () => {
     const guideListToShow = useSelector(state => state.assignment.guideListToShow);
     const loading = useSelector(state => state.assignment.loadingInitial);
 
-    console.log(guideListToShow.data)
-
     useEffect(() => {
         dispatch(getDataInitial())
     }, [])
@@ -461,9 +452,7 @@ const MassiveLoad: FC = () => {
                     <div style={{ flex: 1 }}>
                         <Search />
                     </div>
-
                 </div>
-
             </div>
             <ResumeAssignment />
         </div>
