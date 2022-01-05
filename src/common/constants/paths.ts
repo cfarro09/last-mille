@@ -4,6 +4,11 @@ const paths = {
     SUPERVISOR: '/supervisor',
     CORPORATIONS: '/corporations',
     ORGANIZATIONS: '/organizations',
+
+    REPORT_PROVIDER: '/report-provider',
+    REPORT_SKU: '/report-sku',
+
+
     SIGNIN: '/sign-in',
     SIGNUP: {
         path: "/sign-up/:token",

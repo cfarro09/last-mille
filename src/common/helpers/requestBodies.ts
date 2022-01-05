@@ -2200,3 +2200,27 @@ export const selShippingOrder = () => ({
         status: null
     },
 });
+
+export const selReportControlSKU = (startdate: string, enddate: string) => ({
+    method: "SP_REPORTE_CONTROL_SKU",
+    key: "SP_REPORTE_CONTROL_SKU",
+    parameters: {
+        startdate,
+        enddate,
+        formatToExport: "excel",
+        isNotPaginated: false,
+        offset: (new Date().getTimezoneOffset() / 60) * -1
+    },
+});
+
+export const selReportControlProvider = (startdate: string, enddate: string) => ({
+    method: "SP_REPORTE_ASIGNACION_POR_GUIA",
+    key: "SP_REPORTE_ASIGNACION_POR_GUIA",
+    parameters: {
+        startdate,
+        enddate,
+        formatToExport: "excel",
+        isNotPaginated: false,
+        offset: (new Date().getTimezoneOffset() / 60) * -1
+    },
+});

@@ -44,6 +44,9 @@ export const routes: RouteConfig[] = [
     },
 
 
+  
+
+
 
     {
         key: paths.UPLOAD_DATA,
@@ -115,7 +118,21 @@ export const routes: RouteConfig[] = [
         path: paths.DOMAINS,
         icon: (color) => <ExtrasIcon stroke={color} fill={color} />,
     },
-
+    {
+        key: paths.REPORT_PROVIDER,
+        description: "R. control proveedor",
+        tooltip: <Trans i18nKey={langKeys.domain_plural} />,
+        path: paths.REPORT_PROVIDER,
+        icon: (color) => <ExtrasIcon stroke={color} fill={color} />,
+    },
+    {
+        key: paths.REPORT_SKU,
+        description: "R. control SKU",
+        tooltip: <Trans i18nKey={langKeys.domain_plural} />,
+        path: paths.REPORT_SKU,
+        icon: (color) => <ExtrasIcon stroke={color} fill={color} />,
+    },
+    
 
 ];
 
