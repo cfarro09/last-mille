@@ -62,7 +62,7 @@ const rootReducer = combineReducers<IRootState>({
 });
 
 export default function configureStore(preloadedState?: IRootState) {
-    const middleware: Middleware[] = [callAPIMiddleware, callWSMiddleware];
+    const middleware: Middleware[] = [callAPIMiddleware];
 
     const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
