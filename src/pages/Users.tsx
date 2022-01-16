@@ -569,15 +569,14 @@ const DetailUsers: React.FC<DetailProps> = ({ data: { row, edit }, setViewSelect
 
     const [dataOrganizations, setDataOrganizations] = useState<(Dictionary | null)[]>([]);
     const [orgsToDelete, setOrgsToDelete] = useState<Dictionary[]>([]);
-    const [openDialogStatus, setOpenDialogStatus] = useState(false);
     const [openDialogPassword, setOpenDialogPassword] = useState(false);
 
     const [triggerSave, setTriggerSave] = useState(false)
     const dataStatus = multiData[0] && multiData[0].success ? multiData[0].data : [];
     const dataDocType = multiData[1] && multiData[1].success ? multiData[1].data : [];
     const dataCompanies = multiData[2] && multiData[2].success ? multiData[2].data : [];
-    const dataBillingGroups = multiData[3] && multiData[3].success ? multiData[3].data : [];
-    const dataStatusUsers = multiData[4] && multiData[4].success ? multiData[4].data : [];
+    // const dataBillingGroups = multiData[3] && multiData[3].success ? multiData[3].data : [];
+    const dataStatusUsers = multiData[3] && multiData[3].success ? multiData[3].data : [];
     const [allIndex, setAllIndex] = useState([])
     const [getOrganizations, setGetOrganizations] = useState(false);
     const [waitUploadFile, setWaitUploadFile] = useState(false);
@@ -604,34 +603,11 @@ const DetailUsers: React.FC<DetailProps> = ({ data: { row, edit }, setViewSelect
             setDataOrganizations(p => p.filter((x, i) => i !== index));
     }
 
-
-    useEffect(() => {
-        if (waitUploadFile) {
-            if (!uploadResult.loading && !uploadResult.error) {
-                setValue('image', uploadResult.url)
-                setWaitUploadFile(false);
-            } else if (uploadResult.error) {
-
-                setWaitUploadFile(false);
-            }
-        }
-    }, [waitUploadFile, uploadResult])
-
-
-    const onSelectImage = (files: any) => {
-        const selectedFile = files[0];
-        var fd = new FormData();
-        fd.append('file', selectedFile, selectedFile.name);
-        dispatch(uploadFile(fd));
-        setWaitUploadFile(true);
-    }
-
     const { register, handleSubmit, setValue, getValues, formState: { errors } } = useForm({
         defaultValues: {
             type: 'NINGUNO',
             id: row ? row.userid : 0,
             operation: row ? "EDIT" : "INSERT",
-            description: row?.description || '',
             firstname: row?.firstname || '',
             lastname: row?.lastname || '',
             password: row?.password || '',
@@ -640,13 +616,7 @@ const DetailUsers: React.FC<DetailProps> = ({ data: { row, edit }, setViewSelect
             doctype: row?.doctype || '',
             docnum: row?.docnum || '',
             company: row?.company || '',
-            billinggroupid: row?.billinggroupid || 0,
-            registercode: row?.registercode || '',
-            twofactorauthentication: row?.twofactorauthentication || 'INACTIVO',
             status: row?.status || 'ACTIVO',
-            image: row?.image || null,
-            send_password_by_email: false,
-            pwdchangefirstlogin: false
         }
     });
 
@@ -676,10 +646,7 @@ const DetailUsers: React.FC<DetailProps> = ({ data: { row, edit }, setViewSelect
         register('email', { validate: (value) => (value && value.length) || t(langKeys.field_required) });
         register('doctype', { validate: (value) => (value && value.length) || t(langKeys.field_required) });
         register('docnum', { validate: (value) => (value && value.length) || t(langKeys.field_required) });
-        register('billinggroupid');
-        register('description');
-        register('twofactorauthentication');
-        register('image');
+        // register('billinggroupid');
 
         dispatch(resetMainAux())
         if (row) {
@@ -711,7 +678,7 @@ const DetailUsers: React.FC<DetailProps> = ({ data: { row, edit }, setViewSelect
             const callback = () => {
                 dispatch(showBackdrop(true));
                 dispatch(execute({
-                    header: insUser({ ...data, usr: data.email, twofactorauthentication: data.twofactorauthentication === 'ACTIVO' }),
+                    header: insUser({ ...data, usr: data.email }),
                     detail: [...dataOrganizations.filter(x => x && x?.operation).map(x => x && insOrgUser(x)), ...orgsToDelete.map(x => insOrgUser(x))]!
                 }, true));
                 setWaitSave(true)
@@ -735,10 +702,6 @@ const DetailUsers: React.FC<DetailProps> = ({ data: { row, edit }, setViewSelect
         setTriggerSave(true)
     });
 
-    const onChangeStatus = (value: Dictionary) => {
-        setValue('status', (value ? value.domainvalue : ''));
-        value && setOpenDialogStatus(true)
-    }
 
     return (
         <div style={{ width: '100%' }}>
@@ -784,40 +747,23 @@ const DetailUsers: React.FC<DetailProps> = ({ data: { row, edit }, setViewSelect
                 </div>
                 <div className={classes.containerDetail}>
                     <div className="row-zyx">
-                        <div className="col-6" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                            <FieldEdit
-                                label={t(langKeys.firstname)}
-                                style={{ marginBottom: 8 }}
-                                valueDefault={row?.firstname || ""}
-                                onChange={(value) => setValue('firstname', value)}
-                                error={errors?.firstname?.message}
-                            />
-                            <FieldEdit
-                                label={t(langKeys.lastname)}
-                                className="col-6"
-                                valueDefault={row?.lastname || ""}
-                                onChange={(value) => setValue('lastname', value)}
-                                error={errors?.lastname?.message}
-                            />
-                        </div>
-                        <div className="col-6" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <div style={{ position: 'relative' }}>
-                                <Avatar style={{ width: 120, height: 120 }} src={getValues('image')} />
-                                <input
-                                    name="file"
-                                    accept="image/*"
-                                    id="laraigo-upload-csv-file"
-                                    type="file"
-                                    style={{ display: 'none' }}
-                                    onChange={(e) => onSelectImage(e.target.files)}
-                                />
-                                <label htmlFor="laraigo-upload-csv-file">
-                                    <Avatar style={{ position: 'absolute', bottom: 0, right: 0, backgroundColor: '#7721ad', cursor: 'pointer' }}>
-                                        <CameraAltIcon style={{ color: '#FFF' }} />
-                                    </Avatar>
-                                </label>
-                            </div>
-                        </div>
+
+                        <FieldEdit
+                            className="col-6"
+                            label={t(langKeys.firstname)}
+                            style={{ marginBottom: 8 }}
+                            valueDefault={row?.firstname || ""}
+                            onChange={(value) => setValue('firstname', value)}
+                            error={errors?.firstname?.message}
+                        />
+                        <FieldEdit
+                            className="col-6"
+                            label={t(langKeys.lastname)}
+                            valueDefault={row?.lastname || ""}
+                            onChange={(value) => setValue('lastname', value)}
+                            error={errors?.lastname?.message}
+                        />
+
                     </div>
                     <div className="row-zyx">
                         <FieldEdit
@@ -873,59 +819,10 @@ const DetailUsers: React.FC<DetailProps> = ({ data: { row, edit }, setViewSelect
                     <div className="row-zyx">
                         {edit ?
                             <FieldSelect
-                                label={t(langKeys.billingGroup)}
-                                className="col-6"
-                                valueDefault={row?.billinggroupid || ""}
-                                onChange={(value) => setValue('billinggroupid', (value ? value.domainid : 0))}
-                                error={errors?.billinggroupid?.message}
-                                data={dataBillingGroups}
-                                optionDesc="domaindesc"
-                                optionValue="domainid"
-                            /> :
-                            <FieldView
-                                label={t(langKeys.billingGroup)}
-                                value={row ? row.billinggroup : ""}
-                                className="col-6"
-                            />}
-                        {edit ?
-                            <FieldEdit
-                                label={t(langKeys.registerCode)}
-                                className="col-6"
-                                valueDefault={row?.registercode || ""}
-                                onChange={(value) => setValue('registercode', value)}
-                                error={errors?.registercode?.message}
-                            /> :
-                            <FieldView
-                                label={t(langKeys.registerCode)}
-                                value={row ? row.registercode : ""}
-                                className="col-6"
-                            />}
-                    </div>
-                    <div className="row-zyx">
-                        {edit ?
-                            <FieldSelect
-                                label={t(langKeys.twofactorauthentication)}
-                                className="col-6"
-                                valueDefault={row?.twofactorauthentication ? 'ACTIVO' : "INACTIVO"}
-                                onChange={(value) => setValue('twofactorauthentication', (value ? value.domainvalue : ''))}
-                                error={errors?.twofactorauthentication?.message}
-                                data={dataStatus}
-                                uset={true}
-                                prefixTranslation="status_"
-                                optionDesc="domaindesc"
-                                optionValue="domainvalue"
-                            /> :
-                            <FieldView
-                                label={t(langKeys.twofactorauthentication)}
-                                value={(row?.twofactorauthentication ? t(langKeys.active) : t(langKeys.inactive)).toUpperCase()}
-                                className="col-6"
-                            />}
-                        {edit ?
-                            <FieldSelect
                                 label={t(langKeys.status)}
                                 className="col-6"
                                 valueDefault={row?.status || "ACTIVO"}
-                                onChange={onChangeStatus}
+                                onChange={(value) => setValue('status', value ? value.domainvalue : '')}
                                 uset={true}
                                 error={errors?.status?.message}
                                 data={dataStatusUsers}
@@ -980,20 +877,7 @@ const DetailUsers: React.FC<DetailProps> = ({ data: { row, edit }, setViewSelect
                     </div>
                 }
             </div>
-            <DialogZyx
-                open={openDialogStatus}
-                title={t(langKeys.status)}
-                buttonText1={t(langKeys.save)}
-                handleClickButton1={() => setOpenDialogStatus(false)}
-            >
-                <FieldEdit
-                    label={t(langKeys.description)}
-                    className="col-6"
-                    valueDefault={row?.description || ""}
-                    onChange={(value) => setValue('description', value)}
-                    error={errors?.description?.message}
-                />
-            </DialogZyx>
+
             <ModalPassword
                 openModal={openDialogPassword}
                 setOpenModal={setOpenDialogPassword}
@@ -1056,13 +940,8 @@ const Users: FC = () => {
                 NoFilter: true
             },
             {
-                Header: t(langKeys.attention_group),
-                accessor: 'groups',
-                NoFilter: true
-            },
-            {
                 Header: t(langKeys.role),
-                accessor: 'roledesc',
+                accessor: 'role_name',
                 NoFilter: true
             },
             {
@@ -1092,10 +971,10 @@ const Users: FC = () => {
             getValuesFromDomain("ESTADOGENERICO"),
             getValuesFromDomain("TIPODOCUMENTO"),
             getValuesFromDomain("EMPRESA"),
-            getValuesFromDomain("GRUPOFACTURACION"),
+            // getValuesFromDomain("GRUPOFACTURACION"),
             getValuesFromDomain("ESTADOUSUARIO"),
             getValuesFromDomain("TIPOUSUARIO"), //formulario orguser
-            getValuesFromDomain("GRUPOS"), //formulario orguser
+            // getValuesFromDomain("GRUPOS"), //formulario orguser
             getValuesFromDomain("ESTADOORGUSER"), //formulario orguser
             getOrgsByCorp(0), //formulario orguser
             getRolesByOrg(), //formulario orguser

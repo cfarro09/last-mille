@@ -5,11 +5,10 @@ import { uuidv4 } from '.';
 type ID = string | number;
 
 export const getUserSel = (userid: number): IRequestBody => ({
-    method: "UFN_USER_SEL",
-    key: "UFN_USER_SEL",
+    method: "SP_SEL_USER",
+    key: "SP_SEL_USER",
     parameters: {
-        id: userid,
-        all: true
+        status: null
     }
 })
 
