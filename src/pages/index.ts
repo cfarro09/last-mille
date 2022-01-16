@@ -16,3 +16,4 @@ export { default as ReportProvider } from './ReportProvider';
 export { default as ReportSKU } from './ReportSKU';
 
 export { default as Organizations } from './Organizations';
+export { default as Vehicles } from './Vehicles';
