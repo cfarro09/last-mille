@@ -29,3 +29,5 @@ export const addGuideToRoute = (payload: any): IActionCall => ({ type: actionTyp
 export const addGuideConsulted = (payload: any): IActionCall => ({ type: actionTypes.ADD_GUIDE_CONSULTED, payload });
 
 export const addRoute = (): IActionCall => ({ type: actionTypes.ADD_ROUTE });
+
+export const cleanAll = (): IActionCall => ({ type: actionTypes.CLEAN_ALL });

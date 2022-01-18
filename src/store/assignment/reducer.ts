@@ -41,5 +41,6 @@ export default createReducer<IState>(initialState, {
     [actionTypes.ADD_GUIDE_TO_ROUTE]: caseFUnctions.addGuideToRoute,
     [actionTypes.ADD_GUIDE_CONSULTED]: caseFUnctions.addGuideConsulted,
     [actionTypes.SELECT_GUIDE]: caseFUnctions.selectGuide,
+    [actionTypes.CLEAN_ALL]: caseFUnctions.cleanAll,
     // [actionTypes.CHATBLOCK_RESET]: caseFUnctions.chatblock_reset
 });

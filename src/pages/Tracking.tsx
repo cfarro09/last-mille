@@ -24,7 +24,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import TimelineDot from '@material-ui/lab/TimelineDot';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
-import { getDataInitial, selectGuide, addGuideConsulted } from 'store/assignment/actions';
+import { cleanAll, selectGuide, addGuideConsulted } from 'store/assignment/actions';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -500,6 +500,12 @@ const MassiveLoad: FC = () => {
 
     const multiData = useSelector(state => state.main.multiData);
 
+    useEffect(() => {
+        
+        return () => {
+            dispatch(cleanAll());
+        }
+    }, [])
     return (
         <div style={{ width: '100%', display: 'flex' }}>
             <div style={{ width: '35%', display: 'flex', flexDirection: 'column' }}>

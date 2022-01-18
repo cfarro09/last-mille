@@ -123,6 +123,10 @@ export const selectGuide = (state: IState, action: IAction): IState => ({
     selectedGuide: action.payload
 });
 
+export const cleanAll = (state: IState, action: IAction): IState => ({
+    ...state,
+    ...initialState
+});
 
 // export const getDataReset = (state: IState): IState => ({
 //     ...state,

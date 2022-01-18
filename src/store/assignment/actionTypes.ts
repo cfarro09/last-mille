@@ -10,6 +10,7 @@ const actionType = {
     ADD_GUIDE_TO_ROUTE: 'botdesigner/ADD_GUIDE_TO_ROUTE',
     ADD_GUIDE_CONSULTED: 'botdesigner/ADD_GUIDE_CONSULTED',
     SELECT_GUIDE: 'botdesigner/SELECT_GUIDE',
+    CLEAN_ALL: 'botdesigner/CLEAN_ALL',
 };
 
 export default actionType;
