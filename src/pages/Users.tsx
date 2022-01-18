@@ -159,7 +159,7 @@ const DetailOrgUser: React.FC<ModalProps> = ({ index, data: { row, edit }, multi
             redirect: row?.redirect || '',
             status: 'DESCONECTADO',
             bydefault: row ? row.bydefault : true,
-            clientid: row?.clientid || 0,
+            clientid: parseInt(row?.clients || "0"),
             stores: row?.stores || '',
         })
 
@@ -207,6 +207,8 @@ const DetailOrgUser: React.FC<ModalProps> = ({ index, data: { row, edit }, multi
         }
     }
 
+    console.log(getValues('clientid'))
+    
     return (
         <Accordion defaultExpanded={!row} style={{ marginBottom: '8px' }}>
 
@@ -248,8 +250,10 @@ const DetailOrgUser: React.FC<ModalProps> = ({ index, data: { row, edit }, multi
                             <FieldSelect
                                 label="Cliente"
                                 className={classes.mb2}
-                                valueDefault={row?.clientid || ""}
+                                valueDefault={parseInt(row?.clients || "0")}
+                                triggerOnChangeOnFirst={true}
                                 onChange={value => {
+                                    setValue('clientid', value ? value.clientid : 0);
                                     if (value) {
                                         setDataStores({ loading: true, data: [] });
                                         dispatch(getMultiCollectionAux([
@@ -288,11 +292,11 @@ const DetailOrgUser: React.FC<ModalProps> = ({ index, data: { row, edit }, multi
                             <FieldMultiSelect //los multiselect te devuelven un array de objetos en OnChange por eso se le recorre
                                 label="Tiendas"
                                 className={classes.mb2}
-                                valueDefault={row?.channels || ""}
+                                valueDefault={row?.stores || ""}
                                 onChange={(value) => {
                                     setValue('stores', value.map((o: Dictionary) => o.storeid).join())
                                 }}
-                                error={errors?.channels?.message}
+                                error={errors?.stores?.message}
                                 data={dataStores.data}
                                 loading={dataStores.loading}
                                 optionDesc="description"
@@ -466,7 +470,7 @@ const DetailUsers: React.FC<DetailProps> = ({ data: { row, edit }, setViewSelect
         defaultValues: {
             type: 'NINGUNO',
             id: row ? row.userid : 0,
-            operation: row ? "EDIT" : "INSERT",
+            operation: row ? "UPDATE" : "INSERT",
             firstname: row?.firstname || '',
             lastname: row?.lastname || '',
             password: row?.password || '',

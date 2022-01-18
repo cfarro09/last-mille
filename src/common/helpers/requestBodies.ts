@@ -14,8 +14,8 @@ export const getUserSel = (userid: number): IRequestBody => ({
 
 
 export const getOrgUserSel = (userid: number, orgid: number): IRequestBody => ({
-    method: "SP_ORGUSER_SEL",
-    key: "SP_ORGUSER_SEL",
+    method: "SP_SEL_ORGUSER",
+    key: "SP_SEL_ORGUSER",
     parameters: {
         userid,
         orgid,
@@ -200,7 +200,7 @@ export const insOrgUser = ({ id_role, orgid, bydefault, status, type, operation,
         status,
         redirect,
         operation,
-        clientid, 
+        clients: `${clientid}`, 
         stores
     }
 });
