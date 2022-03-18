@@ -119,8 +119,22 @@ export const routes: RouteConfig[] = [
         icon: (color) => <ExtrasIcon stroke={color} fill={color} />,
     },
     {
+        key: paths.RESOURCES_CONTROL,
+        description: "Control de recursos",
+        tooltip: "Control de recursos",
+        path: paths.RESOURCES_CONTROL,
+        icon: (color) => <ExtrasIcon stroke={color} fill={color} />,
+    },
+    {
+        key: paths.GUIDE_MONITOR,
+        description: "Monitor de guías",
+        tooltip: "Monitor de guías",
+        path: paths.GUIDE_MONITOR,
+        icon: (color) => <ExtrasIcon stroke={color} fill={color} />,
+    },
+    {
         key: paths.REPORT_PROVIDER,
-        description: "R. control proveedor",
+        description: "Reporte de proveedor",
         tooltip: <Trans i18nKey={langKeys.domain_plural} />,
         path: paths.REPORT_PROVIDER,
         icon: (color) => <ExtrasIcon stroke={color} fill={color} />,

@@ -3,7 +3,7 @@ import React, { FC, useEffect, useState } from 'react'; // we need this to make 
 import { useSelector } from 'hooks';
 import { useDispatch } from 'react-redux';
 import Button from '@material-ui/core/Button';
-import { DialogZyx, TemplateIcons, TemplateBreadcrumbs, TitleDetail, FieldEdit, FieldSelect, FieldMultiSelect, TemplateSwitch } from 'components';
+import { DialogZyx, TemplateIcons, TemplateBreadcrumbs, TitleDetail, FieldEdit, FieldSelect } from 'components';
 import { getValuesFromDomain, getDrivers, insUser, insDriver, insVehicle, selProvider } from 'common/helpers';
 import { Dictionary, MultiData } from "@types";
 import TableZyx from '../components/fields/table-simple';
@@ -19,9 +19,7 @@ import {
 import { showSnackbar, showBackdrop, manageConfirmation } from 'store/popus/actions';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import ClearIcon from '@material-ui/icons/Clear';
-import { Divider, Grid, ListItem, Box, IconButton } from '@material-ui/core';
-import { Skeleton } from '@material-ui/lab';
-import DeleteIcon from '@material-ui/icons/Delete';
+import { IconButton } from '@material-ui/core';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
@@ -64,25 +62,6 @@ const useStyles = makeStyles((theme) => ({
         textTransform: 'initial'
     }
 }));
-const ListItemSkeleton: FC = () => (
-    <ListItem style={{ display: 'flex', paddingLeft: 0, paddingRight: 0, paddingBottom: 8 }}>
-        <Box style={{ padding: 20, backgroundColor: 'white', display: 'flex', flexDirection: 'column', flexGrow: 1, }}>
-            <Grid container direction="column">
-                <Grid container direction="row" spacing={1}>
-                    <Grid item sm={12} xl={12} xs={12} md={12} lg={12}>
-                        <Skeleton />
-                    </Grid>
-                </Grid>
-                <Divider style={{ margin: '10px 0' }} />
-                <Grid container direction="row" spacing={1}>
-                    <Grid item sm={12} xl={12} xs={12} md={12} lg={12}>
-                        <Skeleton />
-                    </Grid>
-                </Grid>
-            </Grid>
-        </Box>
-    </ListItem>
-)
 
 interface ModalPasswordProps {
     openModal: boolean;
@@ -96,7 +75,7 @@ const ModalPassword: React.FC<ModalPasswordProps> = ({ openModal, setOpenModal, 
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-    const { register, handleSubmit, setValue, getValues, formState: { errors }, trigger, clearErrors } = useForm({
+    const { register, handleSubmit, setValue, getValues, formState: { errors }, clearErrors } = useForm({
         defaultValues: {
             password: '',
             confirmpassword: '',

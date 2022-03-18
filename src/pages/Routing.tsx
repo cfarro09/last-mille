@@ -1,16 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import SearchIcon from '@material-ui/icons/Search';
-import Paper from '@material-ui/core/Paper';
-import InputBase from '@material-ui/core/InputBase';
-import React, { FC, useEffect, useState, useCallback } from 'react'; // we need this to make JSX compile
+import React, { FC, useEffect, useState } from 'react'; // we need this to make JSX compile
 import { useSelector } from 'hooks';
 import { useDispatch } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import { FieldMultiSelect, DialogZyx, FieldSelect, FieldEdit } from 'components';
-import { getCollection, uploadData, getMultiCollection, resetAllMain, execute, processLoad } from 'store/main/actions';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import { getTemplates, getMassiveLoads, insertShippingOrder } from 'common/helpers';
+import { execute } from 'store/main/actions';
+
+import { insertShippingOrder } from 'common/helpers';
 import { Dictionary } from "@types";
 import { makeStyles } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
@@ -23,9 +20,8 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 // import { FileUploader } from "react-drag-drop-files";
-import * as XLSX from 'xlsx';
-import { IconButton, InputAdornment, Tabs } from '@material-ui/core';
-import { useForm, useFieldArray } from 'react-hook-form';
+import { IconButton } from '@material-ui/core';
+import { useForm } from 'react-hook-form';
 
 const optionsFilterBy = [
     { filterby: 'client_barcode', description: 'Codigo de barras' },
@@ -421,7 +417,6 @@ const MassiveLoad: FC = () => {
 
     const distictList = useSelector(state => state.assignment.districts);
     const guideList = useSelector(state => state.assignment.guideList);
-    const guideListToShow = useSelector(state => state.assignment.guideListToShow);
     const loading = useSelector(state => state.assignment.loadingInitial);
 
     useEffect(() => {

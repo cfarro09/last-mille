@@ -1,6 +1,5 @@
-import { IActionCall, IRequestBody } from "@types";
+import { IActionCall } from "@types";
 import actionTypes from "./actionTypes";
-import { initialState, IState } from "./reducer";
 import { CommonService } from "network";
 import { getGuides, getDrivers } from "../../common/helpers"
 

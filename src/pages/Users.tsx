@@ -3,8 +3,8 @@ import React, { FC, useEffect, useState } from 'react'; // we need this to make 
 import { useSelector } from 'hooks';
 import { useDispatch } from 'react-redux';
 import Button from '@material-ui/core/Button';
-import { DialogZyx, TemplateIcons, TemplateBreadcrumbs, TitleDetail, FieldView, FieldEdit, FieldSelect, FieldMultiSelect, TemplateSwitch } from 'components';
-import { getOrgUserSel, getUserSel, getValuesFromDomain, getOrgsByCorp, getRolesByOrg, getClients, getStoresByClientId, getApplicationsByRole, insUser, insOrgUser, randomText } from 'common/helpers';
+import { DialogZyx, TemplateIcons, TemplateBreadcrumbs, TitleDetail, FieldEdit, FieldSelect, FieldMultiSelect, TemplateSwitch } from 'components';
+import { getOrgUserSel, getUserSel, getValuesFromDomain, getOrgsByCorp, getRolesByOrg, getClients, getStoresByClientId, getApplicationsByRole, insUser, insOrgUser } from 'common/helpers';
 import { Dictionary, MultiData } from "@types";
 import TableZyx from '../components/fields/table-simple';
 import { makeStyles } from '@material-ui/core/styles';
@@ -12,8 +12,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import { useTranslation } from 'react-i18next';
 import { langKeys } from 'lang/keys';
 import { useForm } from 'react-hook-form';
-import Avatar from '@material-ui/core/Avatar';
-import { uploadFile } from 'store/main/actions';
+
 import {
     getCollection, resetAllMain, getMultiCollection,
     execute, getCollectionAux, resetMainAux, getMultiCollectionAux
@@ -21,7 +20,6 @@ import {
 import { showSnackbar, showBackdrop, manageConfirmation } from 'store/popus/actions';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import AddIcon from '@material-ui/icons/Add';
-import CameraAltIcon from '@material-ui/icons/CameraAlt';
 import ClearIcon from '@material-ui/icons/Clear';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -332,7 +330,7 @@ const ModalPassword: React.FC<ModalPasswordProps> = ({ openModal, setOpenModal, 
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-    const { register, handleSubmit, setValue, getValues, formState: { errors }, trigger, clearErrors } = useForm({
+    const { register, handleSubmit, setValue, getValues, formState: { errors }, clearErrors } = useForm({
         defaultValues: {
             password: '',
             confirmpassword: '',
@@ -731,11 +729,11 @@ const Users: FC = () => {
     const { t } = useTranslation();
     const mainResult = useSelector(state => state.main.mainData);
     const mainMultiResult = useSelector(state => state.main.multiData);
-    const executeResult = useSelector(state => state.main.execute);
     const [dataUsers, setdataUsers] = useState<Dictionary[]>([]);
-
+    
     const [viewSelected, setViewSelected] = useState("view-1");
     const [rowSelected, setRowSelected] = useState<RowSelected>({ row: null, edit: false });
+    const executeResult = useSelector(state => state.main.execute);
     const [waitSave, setWaitSave] = useState(false);
 
     const columns = React.useMemo(

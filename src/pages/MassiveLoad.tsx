@@ -4,10 +4,10 @@ import { useSelector } from 'hooks';
 import { useDispatch } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import { FieldSelect, AntTab } from 'components';
-import { getCollection, uploadData, getMultiCollection, resetAllMain, processLoad } from 'store/main/actions';
+import { getCollection, uploadData, getMultiCollection, resetAllMain, processLoad, execute } from 'store/main/actions';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import { getTemplates, getMassiveLoads } from 'common/helpers';
+import { getTemplates, getMassiveLoads, deleteMassiveLoad } from 'common/helpers';
 import { Dictionary } from "@types";
 import TableZyx from '../components/fields/table-simple';
 import SaveIcon from '@material-ui/icons/Save';
@@ -27,9 +27,11 @@ const MassiveLoad: FC = () => {
     const multiData = useSelector(state => state.main.multiData);
 
     const executeResult = useSelector(state => state.main.uploadData);
+    const execute1Result = useSelector(state => state.main.execute);
     const processDataResult = useSelector(state => state.main.processData);
 
     const [waitSave, setWaitSave] = useState(false);
+    const [waitDelete, setWaitDelete] = useState(false);
     const [processSave, setProcessSave] = useState(false);
     const [pageSelected, setPageSelected] = useState(0);
 
@@ -63,13 +65,13 @@ const MassiveLoad: FC = () => {
                                     <PlayArrowIcon style={{ color: '#B6B4BA' }} />
                                 </IconButton>
                             }
-                            {row.status === 'PENDIENTE' &&
+                            {(row.status === 'PENDIENTE' || row.status === 'PROCESADO') &&
                                 <IconButton
                                     aria-label="more"
                                     aria-controls="long-menu"
                                     aria-haspopup="true"
                                     size="small"
-                                // onClick={editFunction}
+                                    onClick={() => handlerDelete(row.massiveloadid)}
                                 >
                                     <DeleteForeverIcon style={{ color: '#B6B4BA' }} />
                                 </IconButton>
@@ -155,7 +157,24 @@ const MassiveLoad: FC = () => {
                 setWaitSave(false);
             }
         }
-    }, [executeResult, waitSave])
+    }, [executeResult, waitDelete])
+
+    useEffect(() => {
+        if (waitDelete) {
+            console.log(execute1Result)
+            if (!execute1Result.loading && !execute1Result.error) {
+                dispatch(showSnackbar({ show: true, success: true, message: 'Se eliminó la carga satisfactoriamente ' }));
+                fetchData();
+                dispatch(showBackdrop(false));
+                setWaitDelete(false);
+            } else if (execute1Result.error) {
+                const errormessage = t(execute1Result.code || "error_unexpected_error", { module: t(langKeys.corporation_plural).toLocaleLowerCase() })
+                dispatch(showSnackbar({ show: true, success: false, message: execute1Result.message || errormessage }))
+                dispatch(showBackdrop(false));
+                setWaitDelete(false);
+            }
+        }
+    }, [execute1Result, waitSave])
 
     const onDrop = useCallback(acceptedFiles => {
         const selectedFile = acceptedFiles[0];
@@ -185,6 +204,7 @@ const MassiveLoad: FC = () => {
 
                             if (dictionarykey) {
                                 if (dictionarykey.obligatory && !value) {
+                                    // eslint-disable-next-line no-throw-literal
                                     throw `La fila ${i}, columna ${key} está vacia.`;
                                 }
                                 datarow[dictionarykey.columnbd] = value;
@@ -199,6 +219,7 @@ const MassiveLoad: FC = () => {
                         });
 
                         if (!completed)
+                            // eslint-disable-next-line no-throw-literal
                             throw `La fila ${i + 1}, no tiene las columnas obligatorias(${columnerror}).`;
 
                         listtransaction.push(datarow);
@@ -231,6 +252,18 @@ const MassiveLoad: FC = () => {
         }))
         setWaitSave(true)
         dispatch(showBackdrop(true));
+    }
+
+    const handlerDelete = async (id: number) => {
+        dispatch(manageConfirmation({
+            visible: true,
+            question: "¿Está seguro de eliminar la carga " + id + "?",
+            callback: () => {
+                dispatch(execute(deleteMassiveLoad(id)))
+                setWaitDelete(true)
+                dispatch(showBackdrop(true));
+            }
+        }))
     }
 
     const triggerProcessLoad = (id: number) => {

@@ -20,6 +20,8 @@ const paths = {
     PROPERTIES: '/extras/properties',
     USERS: '/user',
     DOMAINS: '/extras/domains',
+    RESOURCES_CONTROL: '/resources-control',
+    GUIDE_MONITOR: '/guide-monitor',
 
     UPLOAD_DATA: '/massive_load',
     ROUTING: '/routing',

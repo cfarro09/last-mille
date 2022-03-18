@@ -1,4 +1,3 @@
-import { Search } from '@material-ui/icons';
 import { DashboardTemplateSave, Dictionary, IChannel, IChatWebAdd, ICrmLead, ICrmLeadActivitySave, ICrmLeadNoteSave, ICrmLeadTagsSave, ILead, IPerson, IRequestBody, IRequestBodyPaginated } from '@types';
 import { uuidv4 } from '.';
 
@@ -446,6 +445,36 @@ export const getPaginatedTicket = ({ skip, take, filters, sorts, startdate, endd
     }
 })
 
+export const getPaginatedResourcesControl = ({ skip, take, filters, sorts, startdate, enddate, ...allParameters }: Dictionary): IRequestBodyPaginated => ({
+    methodCollection: "SP_SEL_IMG_MONITOR",
+    methodCount: "SP_SEL_IMG_MONITOR_COUNT",
+    parameters: {
+        startdate,
+        enddate,
+        skip,
+        take,
+        filters,
+        sorts,
+        origin: "img_monitor",
+        offset: (new Date().getTimezoneOffset() / 60) * -1
+    }
+})
+
+export const getPaginatedGuidesMonitor = ({ skip, take, filters, sorts, startdate, enddate, ...allParameters }: Dictionary): IRequestBodyPaginated => ({
+    methodCollection: "SP_SEL_GUIDES_MONITOR",
+    methodCount: "SP_SEL_GUIDES_MONITOR_COUNT",
+    parameters: {
+        startdate,
+        enddate,
+        skip,
+        take,
+        filters,
+        sorts,
+        origin: "guide_monitor",
+        offset: (new Date().getTimezoneOffset() / 60) * -1
+    }
+})
+
 export const getTicketExport = ({ filters, sorts, startdate, enddate, ...allParameters }: Dictionary): IRequestBody => ({
     method: "UFN_CONVERSATIONGRID_EXPORT",
     key: "UFN_CONVERSATIONGRID_EXPORT",
@@ -467,6 +496,30 @@ export const getComunicationChannelDelegate = (communicationchannelid: string): 
     parameters: {
         communicationchannelid
     }
+})
+
+export const deleteMassiveLoad = (massiveloadid: number): IRequestBody => ({
+    method: "SP_DEL_MASSIVE_LOAD",
+    key: "SP_DEL_MASSIVE_LOAD",
+    parameters: {
+        massiveloadid
+    }
+})
+
+export const changeStatus = (guideid: number, status: string, motive: string): IRequestBody => ({
+    method: "SP_CAMBIAR_ESTADO",
+    key: "SP_CAMBIAR_ESTADO",
+    parameters: {
+        guideid,
+        status,
+        motive
+    }
+})
+
+export const getMotives = (): IRequestBody => ({
+    method: "SP_SEL_MOTIVES",
+    key: "SP_SEL_MOTIVES",
+    parameters: {}
 })
 
 export const insConversationClassificationMassive = (conversationid: string, classificationid: number): IRequestBody => ({

@@ -1,5 +1,4 @@
 import { Dictionary, IAction } from "@types";
-import { initialListState } from "common/helpers";
 
 import { initialState, IState } from "./reducer";
 

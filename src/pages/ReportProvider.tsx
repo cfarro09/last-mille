@@ -1,19 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { FC, Fragment, useEffect, useState } from 'react'; // we need this to make JSX compile
+import React, { FC, useEffect, useState } from 'react'; // we need this to make JSX compile
 import { useSelector } from 'hooks';
 import { useDispatch } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import { DateRangePicker } from 'components';
-import { getCorpSel, selShippingOrder, getValuesFromDomain, insOrg, selReportControlProvider, getDateCleaned } from 'common/helpers';
+import { selReportControlProvider, getDateCleaned } from 'common/helpers';
 import { Dictionary } from "@types";
 import TableZyx from '../components/fields/table-simple';
 import { makeStyles } from '@material-ui/core/styles';
-import SaveIcon from '@material-ui/icons/Save';
 import { useTranslation } from 'react-i18next';
 import { langKeys } from 'lang/keys';
-import { useForm } from 'react-hook-form';
-import { getCollection, getMultiCollection, exportData, resetAllMain } from 'store/main/actions';
-import { showSnackbar, showBackdrop, manageConfirmation } from 'store/popus/actions';
+import { getCollection, exportData, resetAllMain } from 'store/main/actions';
+import { showSnackbar } from 'store/popus/actions';
 import { Range } from 'react-date-range';
 import { CalendarIcon, DownloadIcon } from 'icons';
 import SearchIcon from '@material-ui/icons/Search';

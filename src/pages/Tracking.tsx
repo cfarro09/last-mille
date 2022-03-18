@@ -1,20 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import SearchIcon from '@material-ui/icons/Search';
-import Paper from '@material-ui/core/Paper';
-import InputBase from '@material-ui/core/InputBase';
-import React, { FC, useEffect, useState, useCallback } from 'react'; // we need this to make JSX compile
+import React, { FC, useEffect, useState } from 'react'; // we need this to make JSX compile
 import { useSelector } from 'hooks';
 import { useDispatch } from 'react-redux';
-import Button from '@material-ui/core/Button';
-import { FieldMultiSelect, DialogZyx, FieldSelect, FieldEdit } from 'components';
-import { getCollection, getMultiCollectionAux, getMultiCollection, resetAllMain, execute, processLoad } from 'store/main/actions';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import { FieldSelect, FieldEdit } from 'components';
+import { getMultiCollectionAux, getMultiCollection, resetAllMain } from 'store/main/actions';
+
 import { getGuideByBarcode, getInfoGuide, getInfoTracking, getImageGuide } from 'common/helpers';
 import { Dictionary } from "@types";
 import Timeline from '@material-ui/lab/Timeline';
-import TableZyx from '../components/fields/table-simple';
-import DoneIcon from '@material-ui/icons/Done';
 import TimelineItem from '@material-ui/lab/TimelineItem';
 import TimelineSeparator from '@material-ui/lab/TimelineSeparator';
 import TimelineConnector from '@material-ui/lab/TimelineConnector';
@@ -29,13 +23,12 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 // import { FileUploader } from "react-drag-drop-files";
-import * as XLSX from 'xlsx';
 import { IconButton } from '@material-ui/core';
 import BusinessIcon from '@material-ui/icons/Business';
 import PhoneIcon from '@material-ui/icons/Phone';
 import PersonIcon from '@material-ui/icons/Person';
 import EmailIcon from '@material-ui/icons/Email';
-import { AccountBox, AccountCircle, AddRounded, CropFree, LocalShipping, RadioButtonChecked } from '@material-ui/icons';
+import { AccountBox, LocalShipping, RadioButtonChecked } from '@material-ui/icons';
 import CropFreeIcon from '@material-ui/icons/CropFree';
 const optionsFilterBy = [
     { description: 'Codigo de Barras', filterby: 'client_barcode' },
@@ -165,7 +158,6 @@ const ItemTicket: FC<{ guide: Dictionary }> = ({ guide }) => {
 
 
 const InfoGuide: FC = () => {
-    const dispatch = useDispatch();
     const classes = useStyles();
     const dataGuide = useSelector(state => state.main.multiDataAux);
     const [lastattempt, setlastattempt] = useState<Dictionary | null>(null);
@@ -197,6 +189,7 @@ const InfoGuide: FC = () => {
             const lastAttemptObject = attempsres[attempsres.length - 1];
             setlistracking(listdata);
 
+            // eslint-disable-next-line eqeqeq
             const posibletracking = listdata.filter(x => x.attempt == lastAttemptObject.attempt);
             settrackingselected(posibletracking[0].status !== "PROCESADO" ? [listdata[0], ...posibletracking] : posibletracking)
             setlastattempt(lastAttemptObject);
@@ -219,6 +212,7 @@ const InfoGuide: FC = () => {
                                 onChange={(value) => {
                                     if (value) {
                                         settrackingselected(() => {
+                                            // eslint-disable-next-line eqeqeq
                                             const newlist = listracking.filter(x => x.attempt == value.attempt)
                                             return newlist[0].status !== "PROCESADO" ? [listracking[0], ...newlist] : newlist;
                                         })
@@ -493,7 +487,7 @@ const Search = () => {
     )
 }
 
-const MassiveLoad: FC = () => {
+const Tracking: FC = () => {
     const dispatch = useDispatch();
     const selectedGuide = useSelector(state => state.assignment.selectedGuide);
     const guidesConsulted = useSelector(state => state.assignment.guidesConsulted);
@@ -504,6 +498,7 @@ const MassiveLoad: FC = () => {
         
         return () => {
             dispatch(cleanAll());
+            dispatch(resetAllMain());
         }
     }, [])
     return (
@@ -525,4 +520,4 @@ const MassiveLoad: FC = () => {
     )
 }
 
-export default MassiveLoad;
+export default Tracking;
