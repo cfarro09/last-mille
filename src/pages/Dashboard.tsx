@@ -17,7 +17,7 @@ const Organizations: FC = () => {
     return (
         <iframe
             title="Qapla - Página 2"
-            width={"100%"} src="https://app.powerbi.com/view?r=eyJrIjoiNzhmNjQ5MjgtNWNlYy00NzgzLTg5NzgtNDNkZmJkN2E0NWQyIiwidCI6IjBlMGNiMDYwLTA5YWQtNDlmNS1hMDA1LTY4YjliNDlhYTFmNiIsImMiOjR9" frameBorder="0"
+            width={"100%"} src="https://app.powerbi.com/view?r=eyJrIjoiZTNhZGZiYjQtMDJlMi00Zjk3LThjMmQtZTEzYjViNTVhYmMwIiwidCI6IjBlMGNiMDYwLTA5YWQtNDlmNS1hMDA1LTY4YjliNDlhYTFmNiIsImMiOjR9" frameBorder="0"
             allowFullScreen={true}>
 
         </iframe>
