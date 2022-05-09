@@ -84,10 +84,9 @@ const Aside = ({ classes, theme, routes, headerHeight }: IProps) => {
             }}
         >
             <div style={{ height: headerHeight }} />
-            <Divider />
             <div style={{ height: 8 }} />
             <div style={{ overflowX: 'hidden' }}>
-            {routes.map((ele) => (applications && applications[ele.key] && applications[ele.key][0]) ? <LinkList classes={classes} config={ele} key={ele.key} open={openDrawer} /> : null)}
+                {routes.map((ele) => (applications && applications[ele.key] && applications[ele.key][0]) ? <LinkList classes={classes} config={ele} key={ele.key} open={openDrawer} /> : null)}
             </div>
             <div style={{ flexGrow: 1 }} />
         </Drawer>

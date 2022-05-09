@@ -1053,11 +1053,11 @@ interface TemplateSwitchArrayProps extends InputProps {
 }
 
 
-export const TemplateSwitchArray: React.FC<TemplateSwitchArrayProps> = ({ className, onChange, defaultValue, label }) => {
+export const TemplateSwitchArray: React.FC<TemplateSwitchArrayProps> = ({ className, onChange, defaultValue, disabled, label }) => {
     return (
         <div className={className} style={{ paddingBottom: '3px' }}>
             {label && <Box fontWeight={500} lineHeight="18px" fontSize={14} mb={2} color="textPrimary">{label}</Box>}
-            <IOSSwitch defaultChecked={defaultValue} onChange={(e) => {
+            <IOSSwitch disabled={disabled} defaultChecked={defaultValue} onChange={(e) => {
                 onChange && onChange(e.target.checked)
             }} />
         </div>

@@ -63,6 +63,13 @@ export const routes: RouteConfig[] = [
         icon: (color) => <ExtrasIcon stroke={color} fill={color} />,
     },
     {
+        key: paths.TEMPLATES,
+        description: "Plantillas",
+        tooltip: "Plantillas",
+        path: paths.TEMPLATES,
+        icon: (color) => <ExtrasIcon stroke={color} fill={color} />,
+    },
+    {
         key: paths.MANIFEST,
         description: <Trans i18nKey={langKeys.manifest} count={2} />,
         tooltip: <Trans i18nKey={langKeys.manifest} />,

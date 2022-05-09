@@ -29,6 +29,14 @@ export const getOrgsByCorp = (orgid: number, keytmp?: number): IRequestBody => (
         all: true
     }
 })
+export const getTemplatesZyx = (status: string | null = null): IRequestBody => ({
+    method: "SP_SEL_TEMPLATE",
+    key: "SP_SEL_TEMPLATE",
+    parameters: {
+        status,
+        type: "DISTRIBUCION"
+    }
+})
 export const getUsersBySupervisor = (): IRequestBody => ({
     method: "UFN_USERBYSUPERVISOR_SEL",
     key: "UFN_USERBYSUPERVISOR_SEL",
@@ -2242,10 +2250,21 @@ export const getClients = () => ({
     parameters: {},
 });
 
-export const getStoresByClientId = (clientid: number, index: number) => ({
+export const getStoresByClientId = (index: number) => ({
     method: "SP_SEL_STORES",
-    key: "SP_SEL_STORES" + index,
-    parameters: { clientid, storeid: 0, all: true },
+    key: "SP_SEL_STORES",
+    parameters: { clientid: 0, storeid: 0, all: true },
+});
+
+export const insTemplate = (parameters: Dictionary) => ({
+    method: "SP_INS_TEMPLATE",
+    key: "SP_INS_TEMPLATE",
+    parameters: { 
+        ...parameters,
+        name: parameters.description,
+        clientid: 0,
+        id: parameters.loadtemplateid
+     },
 });
 
 export const getMassiveLoads = () => ({

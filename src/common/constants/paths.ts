@@ -32,7 +32,7 @@ const paths = {
     EVIDENCES: '/evidences',
     REPORT_DISTRIBUTION: '/report-distribution',
     TRACKING: '/tracking',
-    TEMPLATES: '/templates',
+    TEMPLATES: '/template',
 
 
 };

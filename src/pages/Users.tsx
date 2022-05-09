@@ -109,11 +109,12 @@ const DetailOrgUser: React.FC<ModalProps> = ({ index, data: { row, edit }, multi
     const resFromOrg = useSelector(state => state.main.multiDataAux);
     const dataRoles = multiData[4] && multiData[4].success ? multiData[4].data : [];
     const dataOrganizationsTmp = multiData[3] && multiData[3].success ? multiData[3].data : []
-    const dataClients = multiData[5] && multiData[5].success ? multiData[5].data : []
+    const dataStores = multiData[5] && multiData[5].success ? multiData[5].data : []
+    // const dataClients = multiData[5] && multiData[5].success ? multiData[5].data : []
 
     const [dataOrganizations, setDataOrganizations] = useState<{ loading: boolean; data: Dictionary[] }>({ loading: false, data: [] })
     const [dataApplications, setDataApplications] = useState<{ loading: boolean; data: Dictionary[] }>({ loading: false, data: [] });
-    const [dataStores, setDataStores] = useState<{ loading: boolean; data: Dictionary[] }>({ loading: false, data: [] });
+    // const [dataStores, setDataStores] = useState<{ loading: boolean; data: Dictionary[] }>({ loading: false, data: [] });
 
     const { register, handleSubmit, setValue, getValues, trigger, formState: { errors }, reset } = useForm();
 
@@ -138,13 +139,13 @@ const DetailOrgUser: React.FC<ModalProps> = ({ index, data: { row, edit }, multi
 
     useEffect(() => {
         const indexApplications = resFromOrg.data.findIndex((x: MultiData) => x.key === ("SP_SEL_APPS_DATA" + (index + 1)));
-        const indexStores = resFromOrg.data.findIndex((x: MultiData) => x.key === ("SP_SEL_STORES" + (index + 1)));
+        // const indexStores = resFromOrg.data.findIndex((x: MultiData) => x.key === ("SP_SEL_STORES" + (index + 1)));
         
         if (indexApplications > -1)
             setDataApplications({ loading: false, data: resFromOrg.data[indexApplications] && resFromOrg.data[indexApplications].success ? resFromOrg.data[indexApplications].data : [] });
 
-        if (indexStores > -1)
-            setDataStores({ loading: false, data: resFromOrg.data[indexStores] && resFromOrg.data[indexStores].success ? resFromOrg.data[indexStores].data : [] });
+        // if (indexStores > -1)
+        //     setDataStores({ loading: false, data: resFromOrg.data[indexStores] && resFromOrg.data[indexStores].success ? resFromOrg.data[indexStores].data : [] });
     }, [resFromOrg])
 
     useEffect(() => {
@@ -157,7 +158,7 @@ const DetailOrgUser: React.FC<ModalProps> = ({ index, data: { row, edit }, multi
             redirect: row?.redirect || '',
             status: 'DESCONECTADO',
             bydefault: row ? row.bydefault : true,
-            clientid: parseInt(row?.clients || "0"),
+            clientid: 0,
             stores: row?.stores || '',
         })
 
@@ -178,7 +179,7 @@ const DetailOrgUser: React.FC<ModalProps> = ({ index, data: { row, edit }, multi
             setDataApplications({ loading: true, data: [] });
             dispatch(getMultiCollectionAux([
                 getApplicationsByRole(row.id_role, index + 1),
-                ...(row.clientid ? [getStoresByClientId(row.clientid, index + 1)] : [])
+                // ...(row.clientid ? [getStoresByClientId(row.clientid, index + 1)] : [])
             ]));
         }
     }, [])
@@ -245,7 +246,7 @@ const DetailOrgUser: React.FC<ModalProps> = ({ index, data: { row, edit }, multi
                                 optionDesc="description"
                                 optionValue="id_role"
                             />
-                            <FieldSelect
+                            {/* <FieldSelect
                                 label="Cliente"
                                 className={classes.mb2}
                                 valueDefault={parseInt(row?.clients || "0")}
@@ -265,7 +266,7 @@ const DetailOrgUser: React.FC<ModalProps> = ({ index, data: { row, edit }, multi
                                 data={dataClients}
                                 optionDesc="name"
                                 optionValue="clientid"
-                            />
+                            /> */}
                         </div>
                         <div className="col-6">
                             <TemplateSwitch
@@ -295,8 +296,7 @@ const DetailOrgUser: React.FC<ModalProps> = ({ index, data: { row, edit }, multi
                                     setValue('stores', value.map((o: Dictionary) => o.storeid).join())
                                 }}
                                 error={errors?.stores?.message}
-                                data={dataStores.data}
-                                loading={dataStores.loading}
+                                data={dataStores}
                                 optionDesc="description"
                                 optionValue="storeid"
                             />
@@ -804,7 +804,8 @@ const Users: FC = () => {
             getValuesFromDomain("ESTADOGENERICO"), //2
             getOrgsByCorp(0), //formulario orguser 3
             getRolesByOrg(), //formulario orguser 4
-            getClients(), //formulario orguser 5
+            getStoresByClientId(0)
+            // getClients(), //formulario orguser 5
         ]));
         return () => {
             dispatch(resetAllMain());

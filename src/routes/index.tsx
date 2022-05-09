@@ -3,7 +3,7 @@ import React, { FC } from "react";
 import Layout from 'components/layout/Layout';
 import Popus from 'components/layout/Popus';
 import {
-	Users, SignIn, Properties, NotFound, Forbidden, InternalServererror,
+	Users, SignIn, Properties, NotFound, Forbidden, InternalServererror, Templates,
 	Reports, Corporations, Organizations, MassiveLoad, Routing, Tracking, Manifest, ReportProvider, ReportSKU, Vehicles, ResourcesControl, GuidesMonitor, Dashboard
 } from 'pages';
 
@@ -104,6 +104,11 @@ const RouterApp: FC = () => {
 				<ProtectRoute exact path={paths.ROUTING}>
 					<Layout mainClasses={classes.main}>
 						<Routing />
+					</Layout>
+				</ProtectRoute>
+				<ProtectRoute exact path={paths.TEMPLATES}>
+					<Layout mainClasses={classes.main}>
+						<Templates />
 					</Layout>
 				</ProtectRoute>
 				<ProtectRoute exact path={paths.TRACKING}>

@@ -20,3 +20,4 @@ export { default as Dashboard } from './Dashboard';
 
 export { default as Organizations } from './Organizations';
 export { default as Vehicles } from './Vehicles';
+export { default as Templates } from './Template';
