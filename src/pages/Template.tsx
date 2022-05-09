@@ -4,7 +4,7 @@ import { useSelector } from 'hooks';
 import { useDispatch } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import { TemplateIcons, TemplateBreadcrumbs, TitleDetail, FieldEdit, FieldSelect, FieldEditArray, FieldMultiSelect, IOSSwitch, TemplateSwitch, TemplateSwitchArray } from 'components';
-import { getTemplatesZyx, getStoresByClientId, getValuesFromDomain, insCorp } from 'common/helpers';
+import { getTemplatesZyx, getStoresByClientId, getValuesFromDomain, insCorp, insTemplate } from 'common/helpers';
 import { Dictionary } from "@types";
 import TableZyx from '../components/fields/table-simple';
 import { makeStyles } from '@material-ui/core/styles';
@@ -19,6 +19,7 @@ import { columnsTemplate } from 'common/constants/columnsTemplate';
 import { IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { Delete } from '@material-ui/icons';
+import { triggerAsyncId } from 'async_hooks';
 
 interface RowSelected {
     row: Dictionary | null,
@@ -155,7 +156,7 @@ const Templates: FC = () => {
 
     const handleDelete = (row: Dictionary) => {
         const callback = () => {
-            dispatch(execute(insCorp({ ...row, operation: 'DELETE', status: 'ELIMINADO', id: row.loadtemplateid })));
+            dispatch(execute(insTemplate({ ...row, operation: 'DELETE', status: 'ELIMINADO', id: row.loadtemplateid })));
             dispatch(showBackdrop(true));
             setWaitSave(true);
         }
@@ -216,12 +217,13 @@ const DetailTemplate: React.FC<DetailTemplateProps> = ({ data: { row }, setViewS
     const dataStatus = multiData[0] && multiData[0].success ? multiData[0].data : [];
     const dataStores = multiData[1] && multiData[1].success ? multiData[1].data : [];
 
-    const { register, handleSubmit, setValue, getValues, control, formState: { errors } } = useForm({
+    const { register, handleSubmit, setValue, getValues, control, formState: { errors }, trigger } = useForm({
         defaultValues: {
             id: row ? row.loadtemplateid : 0,
             description: row ? (row.description || '') : '',
             type: row ? row.type : 'NINGUNO',
-            stores: row?.store || "",
+            clientid: row?.clientid || 0,
+            storeid: row?.storeid || 0,
             status: row?.status || 'ACTIVO',
             operation: row ? "UPDATE" : "INSERT",
             columns: JSON.parse(row?.json_detail || "[]")
@@ -236,10 +238,16 @@ const DetailTemplate: React.FC<DetailTemplateProps> = ({ data: { row }, setViewS
     React.useEffect(() => {
         register('description', { validate: (value) => (value && value.length) || t(langKeys.field_required) });
         register('status', { validate: (value) => (value && value.length) || t(langKeys.field_required) });
+        register('storeid', { validate: (value) => (value && (value || 0) > 0) || t(langKeys.field_required) });
 
-        const columnsSelected = JSON.parse(row?.json_detail || "[]");
-        // setColumnsSelected(columnsSelected);
-        setColumnList(columnList.filter(x => !columnsSelected.some((y: Dictionary) => y.columnbd === x.columnbd)))
+        if (row?.json_detail) {
+            const columnsSelected = JSON.parse(row.json_detail);
+            setColumnList(columnList.filter(x => !columnsSelected.some((y: Dictionary) => y.columnbd === x.columnbd)))
+        } else {
+            setValue(`columns`, columnsTemplate.filter(x => x.obligatory));
+            setColumnList(columnList.filter(x => !x.obligatory));
+            trigger("columns");
+        }
     }, [register, row]);
 
     useEffect(() => {
@@ -262,7 +270,11 @@ const DetailTemplate: React.FC<DetailTemplateProps> = ({ data: { row }, setViewS
         const callback = async () => {
             dispatch(showBackdrop(true));
             setWaitSave(true)
-            dispatch(execute(insCorp(data)));
+            dispatch(execute(insTemplate({
+                ...data,
+                columns: undefined,
+                json_detail: JSON.stringify(data.columns)
+            })));
         }
 
         dispatch(manageConfirmation({
@@ -271,6 +283,8 @@ const DetailTemplate: React.FC<DetailTemplateProps> = ({ data: { row }, setViewS
             callback
         }))
     });
+
+    console.log("columns", getValues("columns"))
 
     return (
         <div style={{ width: '100%' }}>
@@ -309,28 +323,27 @@ const DetailTemplate: React.FC<DetailTemplateProps> = ({ data: { row }, setViewS
                     <div className="row-zyx">
                         <FieldEdit
                             label={"Descripción"}
-                            className="col-6"
+                            className="col-4"
                             valueDefault={getValues('description')}
                             onChange={(value) => setValue('description', value)}
                             error={errors?.description?.message}
                         />
-                        <FieldMultiSelect
-                            label="Tiendas"
-                            valueDefault={row?.stores || ""}
+                        <FieldSelect
+                            label="Tienda"
+                            valueDefault={getValues('storeid')}
                             onChange={(value) => {
-                                setValue('stores', value.map((o: Dictionary) => o.storeid).join())
+                                setValue('storeid', value?.storeid || 0);
+                                setValue('clientid', value?.clientid || 0)
                             }}
-                            className="col-6"
-                            error={errors?.stores?.message}
+                            className="col-4"
+                            error={errors?.storeid?.message}
                             data={dataStores}
                             optionDesc="description"
                             optionValue="storeid"
                         />
-                    </div>
-                    <div className="row-zyx">
                         <FieldSelect
                             label={t(langKeys.status)}
-                            className="col-6"
+                            className="col-4"
                             valueDefault={getValues('status')}
                             onChange={(value) => setValue('status', value?.domainvalue)}
                             error={errors?.status?.message}
@@ -343,7 +356,7 @@ const DetailTemplate: React.FC<DetailTemplateProps> = ({ data: { row }, setViewS
                     </div>
                 </div>
                 <div className={classes.containerDetail}>
-                    <div style={{}}>
+                    <div style={{ marginLeft: 10, marginRight: 10 }}>
                         <FieldSelect
                             label={"Agregar columna"}
                             variant='outlined'
@@ -357,11 +370,11 @@ const DetailTemplate: React.FC<DetailTemplateProps> = ({ data: { row }, setViewS
                                     })
                                 }
                             }}
-                            data={columnsTemplate}
+                            data={columnList}
                             optionDesc="columnbddesc"
                             optionValue="columnbd"
                         />
-                        <div>
+                        <div style={{ marginTop: 16 }}>
                             <TableContainer>
                                 <Table size="small">
                                     <TableHead>
@@ -376,11 +389,14 @@ const DetailTemplate: React.FC<DetailTemplateProps> = ({ data: { row }, setViewS
                                         {fieldsColumns.map((item: Dictionary, i: number) => (
                                             <TableRow key={item.id}>
                                                 <TableCell width={30}>
-                                                    <IconButton
-                                                        onClick={() => columnRemove(i)}
-                                                    >
-                                                        <Delete />
-                                                    </IconButton>
+                                                    {!getValues(`columns.${i}.obligatory`) && (
+                                                        <IconButton
+                                                            size='small'
+                                                            onClick={() => columnRemove(i)}
+                                                        >
+                                                            <Delete />
+                                                        </IconButton>
+                                                    )}
                                                 </TableCell>
                                                 <TableCell>
                                                     {item.columnbddesc}
@@ -388,21 +404,25 @@ const DetailTemplate: React.FC<DetailTemplateProps> = ({ data: { row }, setViewS
                                                 <TableCell>
                                                     <FieldEditArray
                                                         fregister={{
-                                                            ...register(`columns.${i}.keyexcel`),
+                                                            ...register(`columns.${i}.keyexcel`, {
+                                                                validate: {
+                                                                    validate: (value: any) => (value && value.length) || t(langKeys.field_required)
+                                                                }
+                                                            }),
                                                         }}
-                                                        valueDefault={getValues(`columns.${i}.keyexcel`)}
+                                                        valueDefault={getValues(`columns.${i}.keyexcel`) || ""}
                                                         error={errors?.columns?.[i]?.keyexcel?.message}
                                                         onChange={(value) => setValue(`columns.${i}.keyexcel`, value)}
                                                     />
                                                 </TableCell>
                                                 <TableCell>
                                                     <TemplateSwitchArray
-                                                        valueDefault={getValues(`columns.${i}.obligatorycolumn`)}
+                                                        defaultValue={getValues(`columns.${i}.obligatory`) || getValues(`columns.${i}.obligatorycolumn`)}
                                                         fregister={{
                                                             ...register(`columns.${i}.obligatorycolumn`)
                                                         }}
                                                         disabled={getValues(`columns.${i}.obligatory`)}
-                                                        label={"OLA"}
+                                                        label={""}
                                                         // className={classes.switches}
                                                         onChange={(value) => setValue(`columns.${i}.obligatorycolumn`, value)}
                                                     />

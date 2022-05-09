@@ -2262,8 +2262,7 @@ export const insTemplate = (parameters: Dictionary) => ({
     parameters: { 
         ...parameters,
         name: parameters.description,
-        clientid: 0,
-        id: parameters.loadtemplateid
+        operation: parameters.operation || (parameters.id === 0 ? "INSERT" : "UPDATE")
      },
 });
 
