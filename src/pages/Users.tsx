@@ -140,7 +140,7 @@ const DetailOrgUser: React.FC<ModalProps> = ({ index, data: { row, edit }, multi
     useEffect(() => {
         const indexApplications = resFromOrg.data.findIndex((x: MultiData) => x.key === ("SP_SEL_APPS_DATA" + (index + 1)));
         // const indexStores = resFromOrg.data.findIndex((x: MultiData) => x.key === ("SP_SEL_STORES" + (index + 1)));
-        
+
         if (indexApplications > -1)
             setDataApplications({ loading: false, data: resFromOrg.data[indexApplications] && resFromOrg.data[indexApplications].success ? resFromOrg.data[indexApplications].data : [] });
 
@@ -207,7 +207,7 @@ const DetailOrgUser: React.FC<ModalProps> = ({ index, data: { row, edit }, multi
     }
 
     console.log(getValues('clientid'))
-    
+
     return (
         <Accordion defaultExpanded={!row} style={{ marginBottom: '8px' }}>
 
@@ -340,7 +340,7 @@ const ModalPassword: React.FC<ModalPasswordProps> = ({ openModal, setOpenModal, 
     useEffect(() => {
         setValue('password', data?.password);
         setValue('confirmpassword', data?.password);
-        
+
     }, [data]);
 
     const validateSamePassword = (value: string): any => {
@@ -441,7 +441,7 @@ const DetailUsers: React.FC<DetailProps> = ({ data: { row, edit }, setViewSelect
     const [allIndex, setAllIndex] = useState([])
     const [getOrganizations, setGetOrganizations] = useState(false);
     const [triggerSave, setTriggerSave] = useState(false)
-    
+
     const dataDocType = multiData[0] && multiData[0].success ? multiData[0].data : [];
     const dataStatusUsers = multiData[2] && multiData[2].success ? multiData[2].data : [];
 
@@ -564,17 +564,15 @@ const DetailUsers: React.FC<DetailProps> = ({ data: { row, edit }, setViewSelect
     return (
         <div style={{ width: '100%' }}>
             <form onSubmit={onSubmit}>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <div>
-                        <TemplateBreadcrumbs
-                            breadcrumbs={arrayBread}
-                            handleClick={setViewSelected}
-                        />
-                        <TitleDetail
-                            title={row ? `${row.firstname} ${row.lastname}` : t(langKeys.newuser)}
-                        />
-                    </div>
-                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                <TemplateBreadcrumbs
+                    breadcrumbs={arrayBread}
+                    handleClick={setViewSelected}
+                />
+                <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+                    <TitleDetail
+                        title={row ? `${row.firstname} ${row.lastname}` : t(langKeys.newuser)}
+                    />
+                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
                         <Button
                             variant="contained"
                             type="button"
@@ -730,7 +728,7 @@ const Users: FC = () => {
     const mainResult = useSelector(state => state.main.mainData);
     const mainMultiResult = useSelector(state => state.main.multiData);
     const [dataUsers, setdataUsers] = useState<Dictionary[]>([]);
-    
+
     const [viewSelected, setViewSelected] = useState("view-1");
     const [rowSelected, setRowSelected] = useState<RowSelected>({ row: null, edit: false });
     const executeResult = useSelector(state => state.main.execute);

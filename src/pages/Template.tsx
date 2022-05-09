@@ -289,16 +289,16 @@ const DetailTemplate: React.FC<DetailTemplateProps> = ({ data: { row }, setViewS
     return (
         <div style={{ width: '100%' }}>
             <form onSubmit={onSubmit}>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <div>
-                        <TemplateBreadcrumbs
-                            breadcrumbs={arrayBread}
-                            handleClick={setViewSelected}
-                        />
-                        <TitleDetail
-                            title={row ? `${row.description}` : "Nueva plantilla"}
-                        />
-                    </div>
+                <div>
+                    <TemplateBreadcrumbs
+                        breadcrumbs={arrayBread}
+                        handleClick={setViewSelected}
+                    />
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+                    <TitleDetail
+                        title={row ? `${row.description}` : "Nueva plantilla"}
+                    />
                     <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                         <Button
                             variant="contained"
@@ -320,7 +320,7 @@ const DetailTemplate: React.FC<DetailTemplateProps> = ({ data: { row }, setViewS
                     </div>
                 </div>
                 <div className={classes.containerDetail}>
-                    <div className="row-zyx">
+                    <div className="row-zyx" style={{ marginBottom: 0 }}>
                         <FieldEdit
                             label={"Descripción"}
                             className="col-4"

@@ -271,17 +271,15 @@ const DetailUsers: React.FC<DetailProps> = ({ data: { row, edit }, setViewSelect
     return (
         <div style={{ width: '100%' }}>
             <form onSubmit={onSubmit}>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <div>
-                        <TemplateBreadcrumbs
-                            breadcrumbs={arrayBread}
-                            handleClick={setViewSelected}
-                        />
-                        <TitleDetail
-                            title={row ? `${row.first_name} ${row.last_name}` : "Nuevo conductor"}
-                        />
-                    </div>
-                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                <TemplateBreadcrumbs
+                    breadcrumbs={arrayBread}
+                    handleClick={setViewSelected}
+                />
+                <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+                    <TitleDetail
+                        title={row ? `${row.first_name} ${row.last_name}` : "Nuevo conductor"}
+                    />
+                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
                         <Button
                             variant="contained"
                             type="button"
@@ -532,7 +530,7 @@ const Users: FC = () => {
             getValuesFromDomain("TIPODOCUMENTO"), //0
             getValuesFromDomain("ESTADOGENERICO"), //1
             selProvider(), //2
-            
+
         ]));
         return () => {
             dispatch(resetAllMain());
