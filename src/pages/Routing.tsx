@@ -15,13 +15,14 @@ import { langKeys } from 'lang/keys';
 import { showSnackbar, showBackdrop, manageConfirmation } from 'store/popus/actions';
 import CloseIcon from '@material-ui/icons/Close';
 import clsx from 'clsx';
-import { getDataInitial, setGuidesByDistrict, addRoute, selectRoute, setDriverToRoute, removeRoute, addGuideToRoute } from 'store/assignment/actions';
+import { getDataInitial, setGuidesByDistrict, addRoute, selectRoute, setDriverToRoute, removeRoute, addGuideToRoute, removeGuideFromRoute } from 'store/assignment/actions';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 // import { FileUploader } from "react-drag-drop-files";
 import { IconButton } from '@material-ui/core';
 import { useForm } from 'react-hook-form';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const optionsFilterBy = [
     { filterby: 'client_barcode', description: 'Codigo de barras' },
@@ -93,9 +94,11 @@ const useStyles = makeStyles((theme) => ({
         height: 28,
         margin: 4,
     },
+    itemGuide: {
+        padding: `10px ${theme.spacing(2)}px`,
+        borderBottom: '1px solid #e1e1e1'
+    }
 }));
-
-
 
 const DiagloVehicle: React.FC<{ setOpenModal: (param: any) => void, openModal: boolean }> = ({ setOpenModal, openModal }) => {
     const { t } = useTranslation();
@@ -186,7 +189,9 @@ const ItemRoute: FC<{ route: Dictionary, setOpenModal: (param: any) => void }> =
                 style={{ padding: 0 }}
                 color="primary"
                 onClick={() => setOpenModal(true)}
-            >Asignar chofer</Button>
+            >
+                Asignar chofer
+            </Button>
             <div>Ruta {route.id + 1}</div>
             {route.plate_number && (
                 <div>{route.description}</div>
@@ -322,6 +327,9 @@ const Search = () => {
     const open = Boolean(anchorEl);
     const [filterby, setfilterby] = useState({ description: 'Codigo de Barras', filterby: 'client_barcode' });
 
+    const guideInto = React.useRef<HTMLAudioElement>(null);
+    const guideFail = React.useRef<HTMLAudioElement>(null);
+
     const handleClick = (event: any) => {
         setAnchorEl(event.currentTarget);
     };
@@ -334,7 +342,15 @@ const Search = () => {
         e.preventDefault();
         searchbarcode();
     }
-    
+
+    const playAudio = (audio: HTMLAudioElement | null) => {
+        audio?.pause();
+        if (audio) {
+            audio.currentTime = 0;
+        }
+        audio?.play();
+    }
+
     const searchbarcode = () => {
         const route = routeList.data.find(x => x.id === selectedRoute);
         if (route) {
@@ -344,19 +360,22 @@ const Search = () => {
                 if (existeinallroutes) {
                     if (posibleslist.length === 1) {
                         dispatch(showSnackbar({ show: true, success: false, message: "La guía ya fue asignada" }))
+                        playAudio(guideFail.current);
                     }
                     return;
                 }
                 const guides = guideListToShow.data.filter(x => x[filterby.filterby] === text);
-    
+
                 if (guides.length === 0) {
                     if (posibleslist.length === 1) {
                         dispatch(showSnackbar({ show: true, success: false, message: "No existe la guia" }))
+                        playAudio(guideFail.current);
                     }
                 } else {
                     settextsearch('')
                     if (posibleslist.length === 1) {
                         dispatch(showSnackbar({ show: true, success: true, message: "Guia asignada" }))
+                        playAudio(guideInto.current);
                     }
                     dispatch(addGuideToRoute({
                         id: route.id,
@@ -368,51 +387,98 @@ const Search = () => {
     }
 
     return (
-        <form onSubmit={handlersubmit} className={classes.root}>
-            <div style={{ width: '100%' }}>
-                <FieldEdit
-                    label={"Buscar por " + filterby.description} // "Corporation"
-                    valueDefault={textsearch}
-                    onChange={e => settextsearch(e)}
-                />
-            </div>
-            <IconButton type="button" onClick={searchbarcode} className={classes.iconButton} aria-label="search">
-                <SearchIcon />
-            </IconButton>
-            <IconButton type="button" onClick={handleClick} className={classes.iconButton} aria-label="filterby">
-                <MoreVertIcon
-                    aria-label="more"
-                    aria-controls="long-menu"
-                    aria-haspopup="true"
-                />
-            </IconButton>
-            <Menu
-                id="long-menu"
-                anchorEl={anchorEl}
-                keepMounted
-                open={open}
-                onClose={handleClose}
-                PaperProps={{
-                    style: {
-                        maxHeight: 48 * 4.5,
-                        width: '25ch',
-                    },
-                }}
-            >
-                {optionsFilterBy.map((option) => (
-                    <MenuItem key={option.description} selected={option.description === filterby.description} onClick={() => {
-                        handleClose();
-                        setfilterby(option);
-                    }}>
-                        {option.description}
-                    </MenuItem>
-                ))}
-            </Menu>
-        </form>
+        <>
+            <form onSubmit={handlersubmit} className={classes.root}>
+                <div style={{ width: '100%' }}>
+                    <FieldEdit
+                        label={"Buscar por " + filterby.description} // "Corporation"
+                        valueDefault={textsearch}
+                        onChange={e => settextsearch(e)}
+                    />
+                </div>
+                <IconButton type="button" onClick={searchbarcode} className={classes.iconButton} aria-label="search">
+                    <SearchIcon />
+                </IconButton>
+                <IconButton type="button" onClick={handleClick} className={classes.iconButton} aria-label="filterby">
+                    <MoreVertIcon
+                        aria-label="more"
+                        aria-controls="long-menu"
+                        aria-haspopup="true"
+                    />
+                </IconButton>
+                <Menu
+                    id="long-menu"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={open}
+                    onClose={handleClose}
+                    PaperProps={{
+                        style: {
+                            maxHeight: 48 * 4.5,
+                            width: '25ch',
+                        },
+                    }}
+                >
+                    {optionsFilterBy.map((option) => (
+                        <MenuItem key={option.description} selected={option.description === filterby.description} onClick={() => {
+                            handleClose();
+                            setfilterby(option);
+                        }}>
+                            {option.description}
+                        </MenuItem>
+                    ))}
+                </Menu>
+            </form>
+            <audio ref={guideInto} src="https://staticfileszyxme.s3.us-east.cloud-object-storage.appdomain.cloud/alertzyxmetmp.mp3" />
+            <audio ref={guideFail} src="https://staticfileszyxme.s3.us-east.cloud-object-storage.appdomain.cloud/alert2tmpzyxme.mp3" />
+        </>
     )
 }
 
-const MassiveLoad: FC = () => {
+const ResumeRoute: FC = () => {
+    const dispatch = useDispatch();
+    const routeList = useSelector(state => state.assignment.routeList.data);
+    const selectedRoute = useSelector(state => state.assignment.selectedRoute);
+    const [listtoshow, setlisttoshow] = useState<Dictionary[]>([]);
+    const classes = useStyles();
+
+    useEffect(() => {
+        const route = routeList.find(x => x.id === selectedRoute);
+        if (route) {
+            setlisttoshow(route.guides);
+        }
+    }, [selectedRoute, routeList])
+
+    if (selectedRoute === -1)
+        return null;
+
+    return (
+        <div style={{ backgroundColor: 'white', marginTop: 10 }}>
+            {listtoshow.map(guide => (
+                <div className={classes.itemGuide} key={guide.guideid}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+                        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                            <IconButton
+                                size="small"
+                                onClick={() => {
+                                    dispatch(removeGuideFromRoute(selectedRoute, guide.guideid))
+                                }}
+                            >
+                                <DeleteIcon />
+                            </IconButton>
+                            <div>Barcode {guide.client_barcode} - N° Guia {guide.guide_number}</div>
+                        </div>
+                        <div>
+                            <div>{guide.district}</div>
+                        </div>
+                    </div>
+                </div>
+            ))}
+        </div>
+    )
+}
+
+const Routing: FC = () => {
     const dispatch = useDispatch();
 
     const distictList = useSelector(state => state.assignment.districts);
@@ -448,10 +514,13 @@ const MassiveLoad: FC = () => {
                         <Search />
                     </div>
                 </div>
+                <div>
+                    <ResumeRoute />
+                </div>
             </div>
             <ResumeAssignment />
         </div>
     )
 }
 
-export default MassiveLoad;
+export default Routing;

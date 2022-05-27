@@ -30,3 +30,5 @@ export const addGuideConsulted = (payload: any): IActionCall => ({ type: actionT
 export const addRoute = (): IActionCall => ({ type: actionTypes.ADD_ROUTE });
 
 export const cleanAll = (): IActionCall => ({ type: actionTypes.CLEAN_ALL });
+
+export const removeGuideFromRoute = (routeid: number, guideid: number): IActionCall => ({ type: actionTypes.REMOVE_GUIDE_FROM_ROUTE, payload: { routeid, guideid } });

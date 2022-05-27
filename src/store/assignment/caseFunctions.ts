@@ -8,10 +8,7 @@ export const getData = (state: IState): IState => ({
 });
 
 export const getDataSuccess = (state: IState, action: IAction): IState => {
-    // console.log(action.payload.data[0].data)
-    // district
     const districts = Array.from(new Set(action.payload.data[0].data.map((x: Dictionary) => x.district)))
-    console.log(districts)
     return {
         ...state,
         loadingInitial: false,
@@ -125,6 +122,17 @@ export const selectGuide = (state: IState, action: IAction): IState => ({
 export const cleanAll = (state: IState, action: IAction): IState => ({
     ...state,
     ...initialState
+});
+
+export const removeGuideFromRoute = (state: IState, action: IAction): IState => ({
+    ...state,
+    routeList: {
+        ...state.routeList,
+        data: state.routeList.data.map(x => x.id === action.payload.routeid ? {
+            ...x,
+            guides: x.guides.filter((y: Dictionary) => y.guideid !== action.payload.guideid)
+        } : x)
+    }
 });
 
 // export const getDataReset = (state: IState): IState => ({
