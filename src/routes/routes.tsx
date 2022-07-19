@@ -104,13 +104,7 @@ export const routes: RouteConfig[] = [
         path: paths.EVIDENCES,
         icon: (color) => <ExtrasIcon stroke={color} fill={color} />,
     },
-    {
-        key: paths.REPORT_DISTRIBUTION,
-        description: <Trans i18nKey={langKeys.report_distribution} count={2} />,
-        tooltip: <Trans i18nKey={langKeys.report_distribution} />,
-        path: paths.REPORT_DISTRIBUTION,
-        icon: (color) => <ExtrasIcon stroke={color} fill={color} />,
-    },
+    
     {
         key: paths.TRACKING,
         description: <Trans i18nKey={langKeys.tracking} count={2} />,

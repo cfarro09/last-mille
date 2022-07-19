@@ -2075,6 +2075,16 @@ export const leadHistorySel = (leadid: string | number): IRequestBody => ({
     }
 });
 
+export const changeDriver = (vehicleid:  number, driverid: number, shippingorderid: number): IRequestBody => ({
+    key: "SP_REASIGNXAR_ENVIO",
+    method: "SP_REASIGNAR_ENVIO",
+    parameters: {
+        vehicleid,
+        driverid,
+        shippingorderid
+    }
+});
+
 export const updateLeadTagsIns = (tags: ICrmLeadTagsSave): IRequestBody => ({
     key: "UFN_UPDATE_LEAD_TAGS",
     method: "UFN_UPDATE_LEAD_TAGS",
@@ -2310,6 +2320,12 @@ export const selProvider = () => ({
     method: "SP_SEL_PROVIDER",
     key: "SP_SEL_PROVIDER",
     parameters: {},
+});
+
+export const getShippingDetail = (shippingorderid: number) => ({
+    method: "SP_SEL_SHIPPING_DETAIL",
+    key: "SP_SEL_SHIPPING_DETAIL",
+    parameters: { shippingorderid },
 });
 // guideid
 export const getInfoTracking = (parameters: Dictionary) => ({
