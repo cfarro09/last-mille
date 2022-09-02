@@ -145,6 +145,10 @@ const ReportControl: FC = () => {
                 accessor: 'zone_type'
             },
             {
+                Header: 'Cantidad',
+                accessor: 'sku_pieces'
+            },
+            {
                 Header: 'Fecha asignado',
                 accessor: 'fecha_asignado',
                 Cell: (props: any) => {

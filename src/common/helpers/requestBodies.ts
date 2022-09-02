@@ -42,6 +42,11 @@ export const getUsersBySupervisor = (): IRequestBody => ({
     key: "UFN_USERBYSUPERVISOR_SEL",
     parameters: {}
 })
+export const deleteImageGuide = (guideid: number, shippingorderid: number, url: string): IRequestBody => ({
+    method: "SP_DEL_GUIDE_IMAGE",
+    key: "SP_DEL_GUIDE_IMAGE",
+    parameters: { guideid, shippingorderid, url }
+})
 
 export const getListQuickReply = (): IRequestBody => ({
     method: "UFN_QUICKREPLY_LIST_SEL",
